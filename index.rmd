@@ -1,0 +1,15 @@
+---
+title: "Simple Website"
+author: "Will Sherman"
+date: "7/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# What's going on
+## Note the 6 lines of text above are YAML tags
+### We will knit this rmd to a html next
+Then push index.html to github.io repo
