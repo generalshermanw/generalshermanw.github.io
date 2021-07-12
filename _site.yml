@@ -1,5 +1,5 @@
 name: "my-website"
-navbar: 
+navbar:
   title: "My Website"
   left:
     - text: "About Me"
