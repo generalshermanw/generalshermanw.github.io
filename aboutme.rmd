@@ -1,0 +1,15 @@
+---
+title: "aboutme"
+author: "Will Sherman"
+date: "7/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About Me
+### William Sherman
+### Rochester, MN
+### Graduate Student at Southern Methodist University (Data Science)

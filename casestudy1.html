@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Will Sherman" />
+<meta name="author" content="Kati Scheurger" />
+<meta name="author" content="Randy Kim" />
+
+
+<title>Beers Case Study</title>
+
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.9.4.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="aboutme.html">About Me</a>
+</li>
+<li>
+  <a href="casestudy1.html">Beers Case Study</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Beers Case Study</h1>
+<h4 class="author">Will Sherman</h4>
+<h4 class="author">Kati Scheurger</h4>
+<h4 class="author">Randy Kim</h4>
+<h4 class="date">7/15/2021</h4>
+
+</div>
+
+
+<p>Hello to everyone—the board and directors of Budweiser for this particular study. The following analysis includes my team’s exploratory data analysis (EDA) and our key findings related to your questions on the Beers and Breweries data sets. The primary focus of this EDA was the relationship between alcohol by volume (ABV), international bitterness units (IBU), and classification of ales as either IPA or some other type of Ale.</p>
+</p>Link to R Shiny App:</p>
+</p><a href="https://generalshermanw.shinyapps.io/Beers_Case_Study/">Beers Case Study</a></p>
+<pre class="r"><code># The necessary libraries for this EDA
+require(ggplot2)
+require(dplyr)
+require(maps)
+require(e1071)
+require(caret)
+require(class)
+require(stringr)
+require(tidyr)
+require(highcharter)
+require(usmap)
+require(plotly)
+require(kable)
+require(kableExtra)</code></pre>
+<pre class="r"><code>beers &lt;- read.csv(&quot;~/Grad School - Classes/MSDS - 6306 - Doing Data Science/MSDS_6306_DDS_Git/Unit 8 and 9 Case Study 1/Beers.csv&quot;)
+breweries &lt;- read.csv(&quot;~/Grad School - Classes/MSDS - 6306 - Doing Data Science/MSDS_6306_DDS_Git/Unit 8 and 9 Case Study 1/Breweries.csv&quot;)
+
+beers_df &lt;- beers[order(beers$Brewery_id),]</code></pre>
+<div id="question-1-how-many-breweries-are-present-in-each-state" class="section level2">
+<h2>Question 1: How many breweries are present in each state?</h2>
+<pre class="r"><code>#initial plot
+breweries %&gt;% ggplot(aes(x=State)) +
+  geom_histogram(stat=&quot;count&quot;) +
+  labs(title=&quot;Count of breweries per state&quot;) +
+  theme(axis.text.x=element_text(angle=45,hjust=0.8))</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-1-1.png" width="672" /></p>
+<pre class="r"><code>#setting up df to append region to breweries
+st_reg &lt;- data.frame(State=state.abb, Region=state.region)
+st_reg &lt;- rbind(st_reg, data.frame(State=&quot;DC&quot;, Region=&quot;Northeast&quot;))
+st_reg$Region &lt;- as.character(st_reg$Region)
+
+breweries_df &lt;- breweries[order(breweries$State),]
+breweries_df$State &lt;- stringr::str_trim(breweries_df$State) #trim whitespace
+
+#append region to breweries  
+breweries_df &lt;- left_join(breweries_df, st_reg)</code></pre>
+<pre><code>## Joining, by = &quot;State&quot;</code></pre>
+<pre class="r"><code>#plot breweries by state &amp; region
+breweries_df %&gt;% ggplot(aes(x=State)) +
+  geom_histogram(stat=&quot;count&quot;) +
+  labs(title=&quot;Count of breweries per state\nsorted by region&quot;) +
+  theme(axis.text.x=element_text(angle=45,hjust=0.8)) +
+  facet_wrap(~Region, scale=&quot;free&quot;)</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-1-2.png" width="672" /></p>
+<pre class="r"><code>#creating df for table analysis
+b_tabledata &lt;- breweries_df %&gt;%
+  group_by(State) %&gt;%
+  summarise(Breweries=n()) %&gt;%
+  left_join(st_reg)</code></pre>
+<pre><code>## Joining, by = &quot;State&quot;</code></pre>
+<pre class="r"><code>#re-order data
+b_tabledata &lt;- b_tabledata[order(b_tabledata$Breweries, decreasing=T),]
+  
+t1 &lt;- b_tabledata[which(b_tabledata$Region==&quot;North Central&quot;),c(1,2)]
+t2 &lt;- b_tabledata[which(b_tabledata$Region==&quot;Northeast&quot;),c(1,2)]
+t3 &lt;- b_tabledata[which(b_tabledata$Region==&quot;South&quot;),c(1,2)]
+t4 &lt;- b_tabledata[which(b_tabledata$Region==&quot;West&quot;),c(1,2)]
+
+kable(list(t1,t2,t3,t4),
+      booktabs=T,
+      align=c(&quot;c&quot;,&quot;c&quot;),
+      col.names=c(&quot;State&quot;,&quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;Breweries&quot;),
+      escape=F) %&gt;%
+  kable_styling(full_width=F,
+                position=&quot;left&quot;,
+                bootstrap_options = &quot;bordered&quot;) %&gt;%
+  add_header_above(c(&quot;North Central&quot;=1,&quot;Northeast&quot;=1,&quot;South&quot;=1,&quot;West&quot;=1),align=&quot;l&quot;) %&gt;%
+  add_header_above(c(&quot;Brewery count by state\nsorted by region&quot;=4),bold=T)</code></pre>
+<table class="kable_wrapper table table-bordered" style="width: auto !important; ">
+<thead>
+<tr>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; font-weight: bold; " colspan="4">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Brewery count by state<br>sorted by region
+</div>
+</th>
+</tr>
+<tr>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: left; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+North Central
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: left; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Northeast
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: left; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+South
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: left; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+West
+</div>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+State
+</th>
+<th style="text-align:center;">
+   Breweries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+MI
+</td>
+<td style="text-align:center;">
+32
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+IN
+</td>
+<td style="text-align:center;">
+22
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+WI
+</td>
+<td style="text-align:center;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+IL
+</td>
+<td style="text-align:center;">
+18
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+OH
+</td>
+<td style="text-align:center;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+MN
+</td>
+<td style="text-align:center;">
+12
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+MO
+</td>
+<td style="text-align:center;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+IA
+</td>
+<td style="text-align:center;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NE
+</td>
+<td style="text-align:center;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+KS
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ND
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+SD
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+State
+</th>
+<th style="text-align:center;">
+   Breweries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+PA
+</td>
+<td style="text-align:center;">
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+MA
+</td>
+<td style="text-align:center;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NY
+</td>
+<td style="text-align:center;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+VT
+</td>
+<td style="text-align:center;">
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ME
+</td>
+<td style="text-align:center;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+CT
+</td>
+<td style="text-align:center;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+RI
+</td>
+<td style="text-align:center;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NH
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NJ
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+DC
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+State
+</th>
+<th style="text-align:center;">
+   Breweries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+TX
+</td>
+<td style="text-align:center;">
+28
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NC
+</td>
+<td style="text-align:center;">
+19
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+VA
+</td>
+<td style="text-align:center;">
+16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+FL
+</td>
+<td style="text-align:center;">
+15
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+GA
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+MD
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+OK
+</td>
+<td style="text-align:center;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+LA
+</td>
+<td style="text-align:center;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+KY
+</td>
+<td style="text-align:center;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+SC
+</td>
+<td style="text-align:center;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+AL
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+TN
+</td>
+<td style="text-align:center;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+AR
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+DE
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+MS
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+WV
+</td>
+<td style="text-align:center;">
+1
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">
+State
+</th>
+<th style="text-align:center;">
+   Breweries
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+CO
+</td>
+<td style="text-align:center;">
+47
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+CA
+</td>
+<td style="text-align:center;">
+39
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+OR
+</td>
+<td style="text-align:center;">
+29
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+WA
+</td>
+<td style="text-align:center;">
+23
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+AZ
+</td>
+<td style="text-align:center;">
+11
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+MT
+</td>
+<td style="text-align:center;">
+9
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+AK
+</td>
+<td style="text-align:center;">
+7
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+ID
+</td>
+<td style="text-align:center;">
+5
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+HI
+</td>
+<td style="text-align:center;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NM
+</td>
+<td style="text-align:center;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+UT
+</td>
+<td style="text-align:center;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+WY
+</td>
+<td style="text-align:center;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NV
+</td>
+<td style="text-align:center;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The above graph &amp; table show the number of breweries per state (both are broken down by region for more compact reading).</p>
+<pre class="r"><code># Merge the data
+combined &lt;- merge(beers_df, breweries_df, by.x=&quot;Brewery_id&quot;, by.y=&quot;Brew_ID&quot;)
+#head of the merged dataframe
+head(combined,6)</code></pre>
+<pre><code>##   Brewery_id        Name.x Beer_ID   ABV IBU
+## 1          1  Get Together    2692 0.045  50
+## 2          1 Maggie&#39;s Leap    2691 0.049  26
+## 3          1    Wall&#39;s End    2690 0.048  19
+## 4          1       Pumpion    2689 0.060  38
+## 5          1    Stronghold    2688 0.060  25
+## 6          1   Parapet ESB    2687 0.056  47
+##                                 Style Ounces
+## 1                        American IPA     16
+## 2                  Milk / Sweet Stout     16
+## 3                   English Brown Ale     16
+## 4                         Pumpkin Ale     16
+## 5                     American Porter     16
+## 6 Extra Special / Strong Bitter (ESB)     16
+##               Name.y        City State
+## 1 NorthGate Brewing  Minneapolis    MN
+## 2 NorthGate Brewing  Minneapolis    MN
+## 3 NorthGate Brewing  Minneapolis    MN
+## 4 NorthGate Brewing  Minneapolis    MN
+## 5 NorthGate Brewing  Minneapolis    MN
+## 6 NorthGate Brewing  Minneapolis    MN
+##          Region
+## 1 North Central
+## 2 North Central
+## 3 North Central
+## 4 North Central
+## 5 North Central
+## 6 North Central</code></pre>
+<pre class="r"><code>#tail of the merged dataframe
+tail(combined,6)</code></pre>
+<pre><code>##      Brewery_id                    Name.x Beer_ID
+## 2405        556             Pilsner Ukiah      98
+## 2406        557  Heinnieweisse Weissebier      52
+## 2407        557           Snapperhead IPA      51
+## 2408        557         Moo Thunder Stout      50
+## 2409        557         Porkslap Pale Ale      49
+## 2410        558 Urban Wilderness Pale Ale      30
+##        ABV IBU                   Style Ounces
+## 2405 0.055  NA         German Pilsener     12
+## 2406 0.049  NA              Hefeweizen     12
+## 2407 0.068  NA            American IPA     12
+## 2408 0.049  NA      Milk / Sweet Stout     12
+## 2409 0.043  NA American Pale Ale (APA)     12
+## 2410 0.049  NA        English Pale Ale     12
+##                             Name.y          City
+## 2405         Ukiah Brewing Company         Ukiah
+## 2406       Butternuts Beer and Ale Garrattsville
+## 2407       Butternuts Beer and Ale Garrattsville
+## 2408       Butternuts Beer and Ale Garrattsville
+## 2409       Butternuts Beer and Ale Garrattsville
+## 2410 Sleeping Lady Brewing Company     Anchorage
+##      State    Region
+## 2405    CA      West
+## 2406    NY Northeast
+## 2407    NY Northeast
+## 2408    NY Northeast
+## 2409    NY Northeast
+## 2410    AK      West</code></pre>
+<p>Here are the initial views (beginning and end) of the combined dataframe.</p>
+<pre class="r"><code>#adding in a df of missing IBU values per state
+na_byState &lt;- data.frame()
+for(i in st_reg$State){
+  na_byState[i,1]=length(which(grepl(i,combined$State)))
+  na_byState[i,2]=length(which(grepl(i,combined$State) &amp; is.na(combined$IBU)))
+}
+names(na_byState) &lt;- c(&quot;Beers_count&quot;,&quot;IBU_NAs_count&quot;)
+na_byState %&gt;% mutate(Percent_NA = round(IBU_NAs_count/Beers_count*100,digits=0))</code></pre>
+<pre><code>##    Beers_count IBU_NAs_count Percent_NA
+## AL          10             1         10
+## AK          25             8         32
+## AZ          47            23         49
+## AR           5             4         80
+## CA         183            48         26
+## CO         265           119         45
+## CT          27            21         78
+## DE           2             1         50
+## FL          58            21         36
+## GA          16             9         56
+## HI          27             9         33
+## ID          30            13         43
+## IL          91            52         57
+## IN         139            48         35
+## IA          30             5         17
+## KS          23             4         17
+## KY          21             7         33
+## LA          19             9         47
+## ME          27            20         74
+## MD          21            11         52
+## MA          82            31         38
+## MI         162           124         77
+## MN          55             9         16
+## MS          11             0          0
+## MO          42            13         31
+## MT          40            17         42
+## NE          25            16         64
+## NV          11             3         27
+## NH           8             6         75
+## NJ           8             0          0
+## NM          14             8         57
+## NY          74            28         38
+## NC          59            29         49
+## ND           3             0          0
+## OH          49            17         35
+## OK          19             8         42
+## OR         125            38         30
+## PA         100            53         53
+## RI          27             7         26
+## SC          14             9         64
+## SD           7             7        100
+## TN           6             1         17
+## TX         130            41         32
+## UT          26            15         58
+## VT          27            10         37
+## VA          40             5         12
+## WA          68            25         37
+## WV           2             0          0
+## WI          87            45         52
+## WY          15             3         20
+## DC           8             4         50</code></pre>
+<pre class="r"><code>sum(is.na(combined)) #number of total NA&#39;s (equal to NA&#39;s in IBU &amp; ABV)</code></pre>
+<pre><code>## [1] 1067</code></pre>
+<pre class="r"><code>sum(is.na(combined$IBU)) #number of NA&#39;s in IBU</code></pre>
+<pre><code>## [1] 1005</code></pre>
+<pre class="r"><code>sum(is.na(combined$ABV)) #number of NA&#39;s in ABV</code></pre>
+<pre><code>## [1] 62</code></pre>
+<pre class="r"><code>combined_df &lt;- combined #create working df
+
+###set seed
+set.seed(7)
+
+#Generalized Imputation on Mean for ABV
+#calculated mean for all non-missing values &amp; replaced NA&#39;s with mean.
+combined_df$ABV &lt;- ifelse(is.na(combined_df$ABV),
+                       round(sample((mean(combined_df$ABV, na.rm=T) - sd(combined_df$ABV, na.rm=T)):
+                                      (mean(combined_df$ABV, na.rm=T) + sd(combined_df$ABV, na.rm=T)),
+                             size=sum(is.na(combined_df$ABV)), replace=T), 0), combined_df$ABV)
+
+#Subset known IBU&#39;s for train/test
+ibu_known &lt;- combined_df[which(!is.na(combined_df$IBU)),]
+ibu_unknown &lt;- combined_df[which(is.na(combined_df$IBU)),]
+
+#correlation between numerical vectors - weak association
+ibu_known %&gt;% select_if(is.numeric) %&gt;% cor() %&gt;% corrplot::corrplot()</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-3-1.png" width="672" /></p>
+<pre class="r"><code>#visualizing strongest relationship between IBU and categorical values
+plot_ly(ibu_known, x= ~reorder(Style,IBU), y= ~IBU) %&gt;%
+  add_boxplot() %&gt;%
+  layout(title=&quot;IBU by Beer Style&quot;)</code></pre>
+<div id="htmlwidget-8b9447b9fe5749ad79e7" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8b9447b9fe5749ad79e7">{"x":{"visdat":{"4a586fe21ec1":["function () ","plotlyVisDat"]},"cur_data":"4a586fe21ec1","attrs":{"4a586fe21ec1":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"IBU by Beer Style","xaxis":{"domain":[0,1],"automargin":true,"title":"reorder(Style, IBU)","type":"category","categoryorder":"array","categoryarray":["Berliner Weissbier","Gose","American Adjunct Lager","Light Lager","Fruit / Vegetable Beer","Dunkelweizen","English Pale Mild Ale","Other","Witbier","Hefeweizen","Munich Helles Lager","Radler","Roggenbier","Cream Ale","Munich Dunkel Lager","American Pale Wheat Ale","American Blonde Ale","Dubbel","KÃ¶lsch","Abbey Single Ale","English Dark Mild Ale","Euro Pale Lager","Herbed / Spiced Beer","MÃ¤rzen / Oktoberfest","BiÃ¨re de Garde","Flanders Oud Bruin","English Brown Ale","American Amber / Red Lager","American Pilsner","Tripel","Dortmunder / Export Lager","Belgian Pale Ale","","Chile Beer","Quadrupel (Quad)","Wheat Ale","Scotch Ale / Wee Heavy","Keller Bier / Zwickel Bier","Vienna Lager","Doppelbock","Winter Warmer","Pumpkin Ale","Belgian Strong Pale Ale","Bock","Grisette","Milk / Sweet Stout","American Pale Lager","Scottish Ale","American Wild Ale","Euro Dark Lager","Maibock / Helles Bock","American Dark Wheat Ale","Irish Red Ale","Oatmeal Stout","Saison / Farmhouse Ale","Belgian Dark Ale","American Brown Ale","English Bitter","Schwarzbier","English Pale Ale","American Porter","Czech Pilsener","Altbier","German Pilsener","Smoked Beer","American Amber / Red Ale","Foreign / Export Stout","Irish Dry Stout","Old Ale","California Common / Steam Beer","American Stout","American Pale Ale (APA)","Extra Special / Strong Bitter (ESB)","American White IPA","Rye Beer","Baltic Porter","English Strong Ale","English India Pale Ale (IPA)","Belgian IPA","American Double / Imperial Stout","American India Pale Lager","American Strong Ale","English Stout","English Barleywine","American IPA","American Black Ale","Belgian Strong Dark Ale","American Double / Imperial Pilsner","Russian Imperial Stout","American Double / Imperial IPA","American Barleywine"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"IBU"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"fillcolor":"rgba(31,119,180,0.5)","x":["American IPA","Milk / Sweet Stout","English Brown Ale","Pumpkin Ale","American Porter","Extra Special / Strong Bitter (ESB)","American Double / Imperial IPA","English Barleywine","Milk / Sweet Stout","American Pale Ale (APA)","German Pilsener","Pumpkin Ale","Belgian Pale Ale","American Pilsner","American Double / Imperial IPA","Saison / Farmhouse Ale","American IPA","English Brown Ale","Keller Bier / Zwickel Bier","American Pale Lager","American India Pale Lager","American India Pale Lager","American India Pale Lager","American Double / Imperial IPA","American IPA","Wheat Ale","American Double / Imperial IPA","Cream Ale","KÃ¶lsch","American Pale Wheat Ale","American Amber / Red Ale","KÃ¶lsch","American IPA","Russian Imperial Stout","American Porter","American Stout","American Pale Lager","American Amber / Red Ale","Dubbel","American IPA","American IPA","Foreign / Export Stout","American IPA","American Brown Ale","American Blonde Ale","American IPA","American Pale Ale (APA)","American IPA","American IPA","Scotch Ale / Wee Heavy","American IPA","American IPA","American Blonde Ale","American IPA","American Porter","Fruit / Vegetable Beer","Russian Imperial Stout","American Double / Imperial IPA","American IPA","Irish Red Ale","American Porter","Czech Pilsener","Rye Beer","American IPA","American Pale Wheat Ale","Oatmeal Stout","American Pale Ale (APA)","California Common / Steam Beer","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Pale Wheat Ale","American IPA","American Pale Ale (APA)","Altbier","American Porter","Belgian Pale Ale","Scotch Ale / Wee Heavy","Belgian Dark Ale","Scotch Ale / Wee Heavy","Scotch Ale / Wee Heavy","American IPA","American IPA","American IPA","American IPA","Scotch Ale / Wee Heavy","Extra Special / Strong Bitter (ESB)","American IPA","American Pale Ale (APA)","Russian Imperial Stout","Flanders Oud Bruin","Irish Dry Stout","Scottish Ale","English Barleywine","Quadrupel (Quad)","MÃ¤rzen / Oktoberfest","Dortmunder / Export Lager","Dortmunder / Export Lager","American Double / Imperial IPA","Scotch Ale / Wee Heavy","American IPA","MÃ¤rzen / Oktoberfest","English Barleywine","Scottish Ale","Cream Ale","American Pale Ale (APA)","American Blonde Ale","Belgian IPA","Czech Pilsener","American IPA","American IPA","English Strong Ale","KÃ¶lsch","Belgian Dark Ale","Dubbel","American Double / Imperial IPA","American IPA","Smoked Beer","American Pale Ale (APA)","Cream Ale","American Porter","Winter Warmer","American Double / Imperial IPA","American Blonde Ale","American Amber / Red Ale","Hefeweizen","American IPA","American Porter","American Pale Ale (APA)","Fruit / Vegetable Beer","American Pale Ale (APA)","American IPA","Hefeweizen","American Pale Ale (APA)","American Amber / Red Ale","American IPA","American Pale Ale (APA)","English Brown Ale","American Double / Imperial IPA","American IPA","KÃ¶lsch","American IPA","American IPA","Czech Pilsener","KÃ¶lsch","German Pilsener","Witbier","American IPA","American Brown Ale","American Amber / Red Lager","American IPA","American Adjunct Lager","American Porter","American IPA","Gose","German Pilsener","American IPA","American Pale Ale (APA)","Herbed / Spiced Beer","Herbed / Spiced Beer","MÃ¤rzen / Oktoberfest","American Porter","American IPA","Witbier","Tripel","Saison / Farmhouse Ale","American Porter","Saison / Farmhouse Ale","Oatmeal Stout","American IPA","American Brown Ale","Extra Special / Strong Bitter (ESB)","Milk / Sweet Stout","American Pale Wheat Ale","American Pale Wheat Ale","German Pilsener","American Double / Imperial IPA","American Brown Ale","Milk / Sweet Stout","American IPA","Baltic Porter","Gose","Fruit / Vegetable Beer","American IPA","American Pale Ale (APA)","American Double / Imperial IPA","American Strong Ale","American IPA","German Pilsener","Cream Ale","Rye Beer","American IPA","Baltic Porter","American Brown Ale","American Pale Wheat Ale","Saison / Farmhouse Ale","American Double / Imperial IPA","American Stout","Pumpkin Ale","German Pilsener","Cream Ale","Rye Beer","American IPA","American IPA","American IPA","American Blonde Ale","German Pilsener","American IPA","American Wild Ale","American Double / Imperial Stout","American White IPA","American Wild Ale","American Double / Imperial IPA","Belgian Pale Ale","Vienna Lager","Vienna Lager","English India Pale Ale (IPA)","American Blonde Ale","American Pale Ale (APA)","Hefeweizen","Abbey Single Ale","American IPA","Gose","American Double / Imperial IPA","Abbey Single Ale","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American Double / Imperial IPA","Berliner Weissbier","American Blonde Ale","American Pale Wheat Ale","American Black Ale","American IPA","American IPA","English Bitter","Rye Beer","American Brown Ale","American Brown Ale","American Double / Imperial IPA","Keller Bier / Zwickel Bier","Saison / Farmhouse Ale","American IPA","American IPA","American Brown Ale","American Pale Ale (APA)","Belgian Strong Pale Ale","Witbier","American Amber / Red Ale","Berliner Weissbier","","American Brown Ale","Munich Helles Lager","Witbier","American IPA","Berliner Weissbier","American IPA","American Blonde Ale","American IPA","American Porter","Rye Beer","American IPA","American Blonde Ale","American Porter","American Pale Ale (APA)","American Double / Imperial IPA","Gose","American Double / Imperial IPA","American Porter","American Blonde Ale","American IPA","Munich Helles Lager","American IPA","American Dark Wheat Ale","American Dark Wheat Ale","Dortmunder / Export Lager","American Pale Ale (APA)","MÃ¤rzen / Oktoberfest","American Strong Ale","American IPA","Extra Special / Strong Bitter (ESB)","American IPA","American Black Ale","German Pilsener","American IPA","American Brown Ale","American Amber / Red Ale","Radler","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Amber / Red Ale","American Stout","American IPA","American Strong Ale","American White IPA","American Amber / Red Ale","American Strong Ale","Czech Pilsener","American IPA","American IPA","American IPA","American Pale Lager","Euro Dark Lager","American Amber / Red Ale","American Pale Lager","American Amber / Red Ale","American Pale Lager","American IPA","American Amber / Red Ale","American IPA","American Amber / Red Ale","American IPA","American Pale Ale (APA)","American Pale Wheat Ale","Czech Pilsener","American IPA","American Pale Ale (APA)","American Double / Imperial IPA","American IPA","American Pale Wheat Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Blonde Ale","Fruit / Vegetable Beer","KÃ¶lsch","American Pale Ale (APA)","American IPA","American Brown Ale","American Amber / Red Ale","American Amber / Red Ale","American Pale Ale (APA)","American Amber / Red Ale","American Porter","MÃ¤rzen / Oktoberfest","American Pale Ale (APA)","American IPA","American Blonde Ale","American IPA","Cream Ale","American Amber / Red Ale","American Pilsner","Doppelbock","American IPA","American IPA","American Pale Ale (APA)","American Double / Imperial IPA","American Double / Imperial IPA","KÃ¶lsch","American IPA","American Amber / Red Ale","American Amber / Red Ale","American IPA","Hefeweizen","Fruit / Vegetable Beer","American Pale Ale (APA)","American IPA","Other","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Ale (APA)","American White IPA","American IPA","American IPA","Scotch Ale / Wee Heavy","Czech Pilsener","MÃ¤rzen / Oktoberfest","English India Pale Ale (IPA)","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American IPA","Fruit / Vegetable Beer","American IPA","American Pilsner","American Pale Ale (APA)","Russian Imperial Stout","American IPA","American Double / Imperial IPA","American Blonde Ale","American IPA","Cream Ale","American Blonde Ale","American IPA","Hefeweizen","American Pale Ale (APA)","American IPA","American Amber / Red Ale","Saison / Farmhouse Ale","American Pilsner","American IPA","American Pale Lager","Witbier","Euro Dark Lager","American Pilsner","American Pale Ale (APA)","American Double / Imperial IPA","American Pale Ale (APA)","BiÃ¨re de Garde","American Double / Imperial IPA","American Double / Imperial IPA","American Double / Imperial IPA","Old Ale","American Blonde Ale","American Double / Imperial IPA","BiÃ¨re de Garde","Foreign / Export Stout","American Pale Ale (APA)","American Blonde Ale","American Pale Ale (APA)","KÃ¶lsch","American Amber / Red Lager","American IPA","Hefeweizen","American IPA","Fruit / Vegetable Beer","Altbier","American Amber / Red Lager","Altbier","American Pale Ale (APA)","American Pale Wheat Ale","Pumpkin Ale","Czech Pilsener","American Amber / Red Ale","American Pale Ale (APA)","American IPA","Hefeweizen","Munich Dunkel Lager","American Pale Ale (APA)","MÃ¤rzen / Oktoberfest","KÃ¶lsch","Saison / Farmhouse Ale","American Double / Imperial IPA","American Amber / Red Lager","Hefeweizen","American IPA","American IPA","Maibock / Helles Bock","American Brown Ale","American Double / Imperial IPA","Saison / Farmhouse Ale","American Blonde Ale","American IPA","Gose","Witbier","American Black Ale","American Blonde Ale","German Pilsener","American Blonde Ale","American Blonde Ale","American Adjunct Lager","American Amber / Red Lager","Light Lager","American Adjunct Lager","American Adjunct Lager","American Pale Ale (APA)","American Adjunct Lager","American Black Ale","American IPA","American Adjunct Lager","American Adjunct Lager","American Adjunct Lager","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","KÃ¶lsch","MÃ¤rzen / Oktoberfest","American Brown Ale","American Pale Wheat Ale","American Pale Ale (APA)","American Amber / Red Lager","American Adjunct Lager","American IPA","Chile Beer","American IPA","American IPA","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American Blonde Ale","American Amber / Red Ale","Oatmeal Stout","American Blonde Ale","American Pale Ale (APA)","American Pale Wheat Ale","Munich Helles Lager","Munich Dunkel Lager","Czech Pilsener","American Pale Ale (APA)","Czech Pilsener","American Pale Wheat Ale","American Pale Ale (APA)","American Amber / Red Ale","American Pale Ale (APA)","Witbier","Bock","American IPA","American Black Ale","American IPA","American IPA","American IPA","American IPA","American IPA","American IPA","American IPA","American Porter","English Brown Ale","American Brown Ale","American Amber / Red Ale","American IPA","Witbier","American Pale Wheat Ale","Light Lager","American Pilsner","Milk / Sweet Stout","German Pilsener","American Pale Wheat Ale","Cream Ale","American Pale Wheat Ale","American Porter","Bock","MÃ¤rzen / Oktoberfest","Altbier","Belgian Strong Dark Ale","Scotch Ale / Wee Heavy","American Porter","American Pale Ale (APA)","Hefeweizen","American Brown Ale","American IPA","American Amber / Red Ale","American Stout","American IPA","American IPA","American Porter","Fruit / Vegetable Beer","American Blonde Ale","American Pale Ale (APA)","American Amber / Red Ale","American Blonde Ale","American Porter","American IPA","American IPA","American Pale Ale (APA)","American Adjunct Lager","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Amber / Red Ale","American IPA","American Pale Ale (APA)","American Black Ale","American IPA","American Pilsner","Pumpkin Ale","American Amber / Red Lager","American IPA","American IPA","American Blonde Ale","Schwarzbier","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","KÃ¶lsch","","Fruit / Vegetable Beer","American IPA","Scottish Ale","Saison / Farmhouse Ale","American Stout","American Amber / Red Ale","American IPA","Saison / Farmhouse Ale","English Brown Ale","KÃ¶lsch","American Blonde Ale","Fruit / Vegetable Beer","American Porter","American IPA","Dortmunder / Export Lager","American Blonde Ale","American Porter","MÃ¤rzen / Oktoberfest","American Brown Ale","Fruit / Vegetable Beer","Dortmunder / Export Lager","American Dark Wheat Ale","Witbier","American Stout","English Stout","American Porter","Euro Dark Lager","English Dark Mild Ale","American IPA","American Blonde Ale","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","Czech Pilsener","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Strong Ale","American Double / Imperial IPA","American Double / Imperial IPA","Russian Imperial Stout","Czech Pilsener","American Double / Imperial IPA","Scottish Ale","American Double / Imperial IPA","American Pale Ale (APA)","American Pilsner","American Pale Ale (APA)","American Blonde Ale","American IPA","American IPA","Oatmeal Stout","Cream Ale","American IPA","American Amber / Red Ale","Oatmeal Stout","Vienna Lager","American Amber / Red Ale","Cream Ale","Oatmeal Stout","Winter Warmer","American IPA","American Amber / Red Ale","Cream Ale","American Pale Ale (APA)","American Double / Imperial IPA","American Porter","American Pale Ale (APA)","American Pale Ale (APA)","Winter Warmer","American IPA","Belgian Pale Ale","Scotch Ale / Wee Heavy","American Pilsner","American Pale Ale (APA)","American Blonde Ale","American Amber / Red Ale","American IPA","American Amber / Red Ale","American Blonde Ale","American Strong Ale","English Brown Ale","American Amber / Red Ale","American Pale Ale (APA)","American IPA","Baltic Porter","English Bitter","Keller Bier / Zwickel Bier","American Pale Ale (APA)","Light Lager","American Pilsner","American Blonde Ale","American IPA","American IPA","American IPA","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","American Brown Ale","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","Foreign / Export Stout","English Brown Ale","Vienna Lager","American Pale Ale (APA)","American IPA","American Black Ale","Vienna Lager","Munich Helles Lager","American IPA","Munich Helles Lager","American IPA","American Pale Ale (APA)","American IPA","American Pale Lager","American Blonde Ale","American Strong Ale","American IPA","American Blonde Ale","American Pale Lager","American IPA","American IPA","American Blonde Ale","American IPA","KÃ¶lsch","American Double / Imperial IPA","American IPA","American Pale Ale (APA)","American Amber / Red Ale","American Amber / Red Ale","American IPA","Witbier","American IPA","American IPA","American Blonde Ale","American Porter","American Amber / Red Ale","American Pale Ale (APA)","American IPA","American IPA","American IPA","American Amber / Red Ale","Doppelbock","American IPA","American IPA","American Pale Ale (APA)","American Amber / Red Ale","Saison / Farmhouse Ale","American Pale Wheat Ale","American Stout","American Amber / Red Ale","American IPA","American IPA","American Pale Wheat Ale","English Brown Ale","American Pale Ale (APA)","American Blonde Ale","Witbier","American Double / Imperial IPA","Saison / Farmhouse Ale","American Brown Ale","Dunkelweizen","English India Pale Ale (IPA)","Witbier","American IPA","Cream Ale","American Pilsner","American IPA","American Porter","American Porter","American IPA","Hefeweizen","American Strong Ale","American Double / Imperial IPA","American Amber / Red Ale","American IPA","American Amber / Red Ale","American Black Ale","Berliner Weissbier","American Double / Imperial IPA","American IPA","American IPA","American IPA","Witbier","American Brown Ale","American IPA","American Pale Ale (APA)","American IPA","Witbier","American Strong Ale","MÃ¤rzen / Oktoberfest","American Blonde Ale","Hefeweizen","American Double / Imperial IPA","American IPA","American IPA","American Blonde Ale","American Amber / Red Ale","Pumpkin Ale","American Double / Imperial IPA","American IPA","German Pilsener","American Amber / Red Ale","American Porter","Hefeweizen","American Pale Ale (APA)","American Double / Imperial IPA","American Adjunct Lager","Herbed / Spiced Beer","American White IPA","KÃ¶lsch","American IPA","Pumpkin Ale","MÃ¤rzen / Oktoberfest","American IPA","KÃ¶lsch","American Pale Wheat Ale","KÃ¶lsch","American IPA","American Stout","KÃ¶lsch","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","Cream Ale","American IPA","American Pilsner","American Pale Lager","Saison / Farmhouse Ale","American IPA","American IPA","American IPA","American IPA","Hefeweizen","American IPA","American IPA","American Brown Ale","American IPA","American IPA","American IPA","Hefeweizen","Dunkelweizen","American Blonde Ale","American Amber / Red Ale","American IPA","Cream Ale","German Pilsener","Saison / Farmhouse Ale","English Dark Mild Ale","Belgian Pale Ale","Belgian Pale Ale","American Porter","American IPA","American IPA","American Blonde Ale","Fruit / Vegetable Beer","American Pale Ale (APA)","American IPA","American Double / Imperial IPA","American IPA","Munich Helles Lager","American Black Ale","American Pale Wheat Ale","American Amber / Red Ale","Bock","American IPA","KÃ¶lsch","California Common / Steam Beer","American IPA","Schwarzbier","German Pilsener","American Pale Ale (APA)","American Pale Ale (APA)","American IPA","American Stout","American Pale Lager","Extra Special / Strong Bitter (ESB)","American IPA","American IPA","American Amber / Red Ale","American Pale Wheat Ale","American Amber / Red Ale","American Blonde Ale","English India Pale Ale (IPA)","American Amber / Red Ale","Altbier","Fruit / Vegetable Beer","Altbier","American Pale Ale (APA)","American Pale Ale (APA)","Altbier","American Double / Imperial IPA","American Double / Imperial IPA","Irish Red Ale","American IPA","American White IPA","American Blonde Ale","Extra Special / Strong Bitter (ESB)","American IPA","Winter Warmer","Fruit / Vegetable Beer","American Pale Wheat Ale","American Black Ale","American Pale Ale (APA)","English India Pale Ale (IPA)","American Pale Ale (APA)","Belgian IPA","American Pale Lager","American Double / Imperial IPA","American IPA","Irish Dry Stout","American IPA","English Pale Mild Ale","American Double / Imperial IPA","American Amber / Red Ale","American IPA","Saison / Farmhouse Ale","Vienna Lager","American Amber / Red Ale","Witbier","Scottish Ale","American Pale Ale (APA)","American IPA","American Porter","American Blonde Ale","Witbier","American IPA","American Pale Ale (APA)","KÃ¶lsch","American IPA","American IPA","Vienna Lager","Hefeweizen","American Amber / Red Ale","American Pale Ale (APA)","American IPA","American Strong Ale","American Porter","Saison / Farmhouse Ale","American Amber / Red Ale","American IPA","American IPA","American IPA","American Double / Imperial IPA","English Pale Ale","American IPA","Pumpkin Ale","Fruit / Vegetable Beer","American IPA","Radler","Hefeweizen","Hefeweizen","Saison / Farmhouse Ale","American Brown Ale","American IPA","American Stout","American Amber / Red Ale","Fruit / Vegetable Beer","American IPA","American IPA","American IPA","American Blonde Ale","Radler","American IPA","Vienna Lager","Vienna Lager","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","Vienna Lager","American Brown Ale","Pumpkin Ale","American Double / Imperial IPA","American Double / Imperial IPA","Fruit / Vegetable Beer","Hefeweizen","Fruit / Vegetable Beer","American Double / Imperial IPA","American Double / Imperial IPA","American Pale Ale (APA)","American IPA","American Pale Ale (APA)","American Brown Ale","American IPA","Irish Red Ale","American Pale Wheat Ale","American IPA","American IPA","American Barleywine","American Pale Ale (APA)","American Pale Wheat Ale","American Strong Ale","American IPA","American IPA","American Pale Ale (APA)","American Amber / Red Ale","American IPA","Chile Beer","Fruit / Vegetable Beer","American Blonde Ale","American Porter","American Dark Wheat Ale","American Amber / Red Ale","American IPA","Rye Beer","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","Tripel","Witbier","American Brown Ale","Belgian Strong Pale Ale","American IPA","American Double / Imperial Pilsner","American IPA","American Pale Ale (APA)","Munich Helles Lager","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","Schwarzbier","German Pilsener","American IPA","American Pale Ale (APA)","American Black Ale","American Pale Ale (APA)","American Amber / Red Ale","Hefeweizen","American IPA","American Pale Ale (APA)","Scottish Ale","American IPA","American IPA","English Pale Ale","American Pale Wheat Ale","American Brown Ale","English Strong Ale","American Brown Ale","American Pale Wheat Ale","American IPA","English Pale Ale","American Pale Wheat Ale","American Brown Ale","Pumpkin Ale","American IPA","Hefeweizen","English Brown Ale","American Pale Ale (APA)","American IPA","American IPA","Euro Dark Lager","American IPA","Czech Pilsener","American IPA","Cream Ale","American Pale Ale (APA)","American IPA","American IPA","American IPA","American Double / Imperial IPA","American IPA","American Blonde Ale","American Brown Ale","American Pale Ale (APA)","Herbed / Spiced Beer","American IPA","American Double / Imperial IPA","American Black Ale","MÃ¤rzen / Oktoberfest","American IPA","American IPA","Belgian Pale Ale","American Pale Wheat Ale","Tripel","Fruit / Vegetable Beer","American Double / Imperial IPA","American Pale Ale (APA)","American IPA","Pumpkin Ale","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","Tripel","American Amber / Red Ale","American Double / Imperial IPA","American Blonde Ale","American Double / Imperial IPA","American Double / Imperial IPA","Witbier","Oatmeal Stout","American Pale Ale (APA)","American Pale Ale (APA)","Czech Pilsener","American Blonde Ale","American Amber / Red Ale","Saison / Farmhouse Ale","Fruit / Vegetable Beer","American Brown Ale","Vienna Lager","Irish Red Ale","Witbier","Irish Red Ale","American Pale Ale (APA)","Rye Beer","American Brown Ale","American IPA","MÃ¤rzen / Oktoberfest","American Amber / Red Ale","American Stout","American Pale Ale (APA)","Irish Red Ale","American Blonde Ale","American Pale Wheat Ale","American Stout","American Pale Ale (APA)","American Pilsner","American Barleywine","Winter Warmer","American Pale Ale (APA)","Fruit / Vegetable Beer","Fruit / Vegetable Beer","Fruit / Vegetable Beer","American IPA","American IPA","American IPA","English Strong Ale","American Double / Imperial IPA","American Pale Ale (APA)","Winter Warmer","American Black Ale","Belgian Dark Ale","American IPA","Fruit / Vegetable Beer","American IPA","American IPA","Winter Warmer","Grisette","Munich Helles Lager","Winter Warmer","American Double / Imperial IPA","MÃ¤rzen / Oktoberfest","American IPA","Munich Dunkel Lager","Hefeweizen","German Pilsener","American Pale Ale (APA)","American Stout","American Double / Imperial IPA","American Porter","American Amber / Red Ale","American Brown Ale","American Amber / Red Ale","Witbier","American IPA","American Pale Wheat Ale","Munich Helles Lager","American Porter","American IPA","American Strong Ale","American IPA","American Stout","American Pale Ale (APA)","Witbier","American Porter","American Pale Ale (APA)","Cream Ale","Extra Special / Strong Bitter (ESB)","Extra Special / Strong Bitter (ESB)","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American Pale Ale (APA)","Extra Special / Strong Bitter (ESB)","Euro Pale Lager","American Pale Ale (APA)","German Pilsener","American IPA","MÃ¤rzen / Oktoberfest","American IPA","Gose","Witbier","American IPA","American IPA","American Double / Imperial IPA","American Double / Imperial IPA","American Double / Imperial IPA","Russian Imperial Stout","American Double / Imperial IPA","Scottish Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Wheat Ale","American IPA","American Amber / Red Ale","Saison / Farmhouse Ale","American Black Ale","Fruit / Vegetable Beer","American Brown Ale","American IPA","American Blonde Ale","Altbier","American Pale Ale (APA)","American Amber / Red Ale","American Black Ale","American Amber / Red Lager","American Black Ale","American Amber / Red Ale","American Blonde Ale","American IPA","American Pale Lager","American Stout","Belgian Pale Ale","Roggenbier","KÃ¶lsch","American IPA","Berliner Weissbier","American Double / Imperial IPA","American Double / Imperial IPA","KÃ¶lsch","Milk / Sweet Stout","American IPA","KÃ¶lsch","American Blonde Ale","American Brown Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Black Ale","American Pale Wheat Ale","Saison / Farmhouse Ale","American Black Ale","American Pale Lager","Cream Ale","American IPA","American Double / Imperial Stout","Belgian IPA","American Pale Ale (APA)","American Double / Imperial Stout","Saison / Farmhouse Ale","American Pale Wheat Ale","American IPA","American Brown Ale","Hefeweizen","Munich Helles Lager","American IPA","American IPA","Czech Pilsener","American IPA","KÃ¶lsch","Scotch Ale / Wee Heavy","Extra Special / Strong Bitter (ESB)","Czech Pilsener","American IPA","English India Pale Ale (IPA)","English India Pale Ale (IPA)","American Amber / Red Lager","American Amber / Red Lager","American Amber / Red Lager","American Amber / Red Lager","Irish Red Ale","American Pale Ale (APA)","KÃ¶lsch","English Bitter","American Porter","American IPA","Fruit / Vegetable Beer","American Pale Ale (APA)","Rye Beer","American Double / Imperial IPA","Oatmeal Stout","American IPA","American IPA","Witbier","American Pale Ale (APA)","Oatmeal Stout","Cream Ale","American Porter","Witbier","American Pale Ale (APA)","American Double / Imperial IPA","American IPA","American IPA","Hefeweizen","American Blonde Ale","American Blonde Ale","Hefeweizen","American Pale Ale (APA)","Irish Dry Stout","American Blonde Ale","American IPA","Irish Red Ale","American Pale Ale (APA)","American Amber / Red Ale","American IPA","English Brown Ale","American Pale Wheat Ale","American Blonde Ale","Saison / Farmhouse Ale","American Pale Ale (APA)","American Pale Ale (APA)","American IPA","Gose","American Amber / Red Lager","American Amber / Red Lager","American IPA","American Pale Wheat Ale","American Pale Ale (APA)","American Pale Ale (APA)","Scottish Ale","American Brown Ale","Saison / Farmhouse Ale","American Pale Ale (APA)","American Stout","Rye Beer","American Amber / Red Ale","KÃ¶lsch","American Brown Ale","American IPA","Fruit / Vegetable Beer","Munich Helles Lager","American Pale Ale (APA)","American Double / Imperial IPA","Oatmeal Stout","American IPA","American Brown Ale","American IPA","MÃ¤rzen / Oktoberfest","American IPA","English Pale Ale","English Pale Ale","American Double / Imperial IPA","American IPA","German Pilsener","American Blonde Ale","American IPA","American Pale Ale (APA)","American Amber / Red Ale","American Amber / Red Ale","American IPA","American IPA","American Amber / Red Ale","American White IPA","American Blonde Ale","Vienna Lager","American IPA","American Amber / Red Ale","American IPA","Scotch Ale / Wee Heavy","American Amber / Red Ale","American Pale Ale (APA)","American IPA","American IPA","American Porter","American IPA","Fruit / Vegetable Beer","Hefeweizen","American Amber / Red Ale","Vienna Lager","Vienna Lager","American Pale Wheat Ale","American Double / Imperial IPA","Russian Imperial Stout","Russian Imperial Stout","Scottish Ale","Scottish Ale","Scottish Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Dark Wheat Ale","American IPA","American Porter","Scotch Ale / Wee Heavy","American IPA","American IPA","American Pale Ale (APA)","American IPA","Scotch Ale / Wee Heavy","Oatmeal Stout","American Black Ale","American Amber / Red Lager","American Pale Ale (APA)","Czech Pilsener","American IPA","American IPA","American IPA","American Pale Lager","American Blonde Ale","American IPA","Munich Helles Lager","American Pilsner","American Blonde Ale","American IPA","American Pale Ale (APA)","KÃ¶lsch","American Porter","American IPA","American Black Ale","American Amber / Red Ale","Herbed / Spiced Beer","Schwarzbier","American IPA","Fruit / Vegetable Beer","American Amber / Red Lager","American Pale Wheat Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Lager","American Pale Lager","Hefeweizen","Hefeweizen","Maibock / Helles Bock","KÃ¶lsch","American Brown Ale","American IPA"],"y":[50,26,19,38,25,47,68,80,25,42,25,21,13,17,68,38,65,20,18,15,80,65,45,100,85,24,100,30,28,19,16,17,42,75,35,54,12,25,20,74,47,30,51,10,15,65,40,35,72,50,65,42,27,104,20,12,90,115,36,22,50,35,75,46,64,31,37,27,90,58,40,115,16,86,40,29,23,20,23,36,30,23,75,75,75,75,30,55,77,50,75,23,27,23,60,24,23,24,24,91,30,77,23,60,23,20,50,23,61,48,45,65,50,15,18,22,90,70,35,36,18,20,25,99,15,20,15,85,20,45,20,45,85,15,45,20,80,35,34,101,40,23,75,70,45,20,42,10,69,17,26,63,19,11,60,8,20,100,40,15,31,25,28,70,14,34,20,35,20,20,110,12,93,20,20,20,16,93,22,20,60,52,16,7,62,50,111,70,74,42,34,57,62,85,47,11,35,103,69,48,42,34,57,62,47,75,20,35,70,24,51,33,30,90,30,15,22,44,27,45,16,22,76,12,85,22,40,55,100,11,18,28,85,69,90,37,34,45,45,120,20,33,99,68,20,46,25,15,25,8,27,33,20,10,70,5,82,17,45,25,18,75,19,23,45,90,10,115,12,8,62,12,69,43,43,17,36,23,68,87,32,68,34,38,35,16,20,21,20,20,20,20,20,20,20,20,20,20,20,20,60,35,75,70,60,60,70,32,75,40,70,29,21,18,29,18,29,70,18,70,18,65,37,26,28,65,37,69,65,11,30,30,18,18,20,18,18,11,40,70,32,30,42,42,60,35,21,45,75,25,67,20,93,45,25,85,66,44,75,126,11,75,24,24,70,10,10,45,85,16,40,28,36,70,70,72,22,30,26,94,38,45,72,11,82,15,40,60,100,100,25,100,21,16,35,8,44,88,35,33,22,60,62,20,45,20,36,103,45,23,110,100,110,40,20,100,23,50,45,20,65,17,25,65,17,58,10,40,24,40,42,6,25,35,25,35,55,16,25,40,25,20,20,85,45,15,70,75,25,33,100,25,23,70,5,25,85,21,52,50,21,8,8,13,9,9,33,9,9,64,9,9,9,15,7,7,7,13,15,32,7,33,14,9,89,28,72,65,45,60,20,80,40,20,60,14,17,15,21,68,21,14,49,32,42,27,25,65,65,60,60,60,60,60,70,70,65,25,25,75,70,18,18,10,30,30,35,24,22,24,22,32,15,43,72,29,36,47,11,30,70,24,27,70,60,35,21,18,37,28,18,40,82,100,55,16,24,94,94,55,55,55,55,55,24,94,44,71,60,20,10,22,42,83,17,32,82,34,29,17,21,9,47,21,20,47,35,70,36,40,28,22,18,33,60,27,22,33,25,36,18,27,25,13,65,66,33,23,26,60,22,35,65,65,35,65,65,65,85,65,65,85,70,60,85,98,35,100,35,85,65,21,68,25,60,80,13,4,80,15,13,25,15,4,13,6,80,15,4,28,80,30,60,60,22,73,21,20,25,45,25,35,100,35,25,40,20,40,53,68,25,27,35,35,12,17,21,70,41,48,27,70,70,36,20,27,70,48,55,36,22,18,32,60,80,28,18,55,18,70,40,55,14,20,60,70,20,13,90,90,20,69,25,30,69,50,53,53,50,15,75,75,22,27,23,42,77,62,97,40,24,85,75,50,75,30,46,40,115,60,38,21,21,35,40,20,118,35,23,12,69,18,65,12,9,66,52,52,80,25,17,104,85,81,38,100,9,80,35,61,61,12,24,70,55,80,16,69,40,15,11,115,80,50,15,26,43,130,64,35,30,16,15,50,90,15,15,45,28,42,20,30,42,28,10,28,42,45,22,65,45,26,35,61,23,75,35,74,70,92,60,15,65,60,20,70,70,60,15,20,30,50,75,20,30,30,18,31,35,30,65,40,18,8,30,60,88,69,18,80,22,72,18,40,22,55,70,28,48,39,55,65,15,18,58,65,72,30,61,35,10,42,30,33,8,30,49,40,18,120,120,22,50,45,28,49,90,22,10,27,80,45,40,20,65,40,77,30,34,44,16,80,24,51,20,18,24,16,16,43,73,40,20,15,66,40,22,67,87,33,42,35,28,69,83,45,34,44,37,55,50,85,17,37,20,10,55,30,30,30,25,28,45,40,42,20,75,60,60,12,8,45,30,30,15,7,30,65,20,75,75,20,13,20,80,108,35,65,35,25,60,21,28,100,100,100,32,12,90,100,72,37,39,92,20,24,18,25,18,20,70,20,45,60,55,60,25,23,31,25,85,85,51,31,18,24,14,24,35,45,16,46,50,37,15,100,32,19,70,65,40,35,26,60,26,35,65,40,35,26,11,65,10,15,29,69,64,19,64,23,70,18,55,135,95,70,93,88,25,49,44,15,85,99,77,22,55,75,21,18,30,14,85,31,80,17,22,23,5,41,100,27,100,100,13,23,41,32,34,20,60,30,5,22,20,30,10,30,48,99,22,70,25,25,36,48,30,10,14,35,35,33,92,45,42,17,17,17,70,70,70,52,94,42,45,65,35,65,17,74,74,16,25,18,16,90,25,113,21,11,44,40,40,138,35,35,20,24,12,68,15,18,30,65,78,80,29,54,20,34,54,22,37,37,37,35,60,30,22,60,20,52,12,52,5,16,65,65,86,86,85,98,85,35,65,65,9,15,68,19,30,95,11,30,62,16,40,50,35,55,42,55,35,11,43,15,58,20,20,20,70,6,85,85,25,30,70,16,17,55,35,35,35,75,13,20,65,19,30,86,85,45,40,50,20,45,30,30,16,17,45,65,55,60,32,24,42,32,65,47,47,18,18,18,18,23,48,22,28,24,66,7,43,85,76,35,50,50,10,35,38,18,34,21,53,95,44,44,28,19,19,28,42,55,46,71,46,40,20,75,16,15,15,35,45,30,80,10,26,26,70,18,30,42,19,26,29,45,26,23,31,23,55,55,17,14,36,103,54,64,36,45,30,75,30,30,82,75,22,21,70,38,32,31,44,44,27,40,16,28,80,27,85,12,15,17,64,105,55,100,17,12,49,22,22,22,85,98,98,35,35,35,65,65,65,65,65,60,9,83,31,11,65,65,50,65,11,29,71,25,36,32,55,65,60,28,27,67,27,29,20,55,28,27,26,69,85,42,35,40,52,13,17,18,52,55,17,15,15,18,18,30,28,22,70],"type":"box","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>#visual comparison with ABV and Style (same order as IBU-relationship)
+plot_ly(ibu_known, x= ~reorder(Style,IBU), y= ~ABV) %&gt;%
+  add_boxplot() %&gt;%
+  layout(title=&quot;ABV by Beer Style\nordered by increasing IBU&quot;)</code></pre>
+<div id="htmlwidget-3aef7156841fa5c274e8" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3aef7156841fa5c274e8">{"x":{"visdat":{"4a584f00f90":["function () ","plotlyVisDat"]},"cur_data":"4a584f00f90","attrs":{"4a584f00f90":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"ABV by Beer Style<br />ordered by increasing IBU","xaxis":{"domain":[0,1],"automargin":true,"title":"reorder(Style, IBU)","type":"category","categoryorder":"array","categoryarray":["Berliner Weissbier","Gose","American Adjunct Lager","Light Lager","Fruit / Vegetable Beer","Dunkelweizen","English Pale Mild Ale","Other","Witbier","Hefeweizen","Munich Helles Lager","Radler","Roggenbier","Cream Ale","Munich Dunkel Lager","American Pale Wheat Ale","American Blonde Ale","Dubbel","KÃ¶lsch","Abbey Single Ale","English Dark Mild Ale","Euro Pale Lager","Herbed / Spiced Beer","MÃ¤rzen / Oktoberfest","BiÃ¨re de Garde","Flanders Oud Bruin","English Brown Ale","American Amber / Red Lager","American Pilsner","Tripel","Dortmunder / Export Lager","Belgian Pale Ale","","Chile Beer","Quadrupel (Quad)","Wheat Ale","Scotch Ale / Wee Heavy","Keller Bier / Zwickel Bier","Vienna Lager","Doppelbock","Winter Warmer","Pumpkin Ale","Belgian Strong Pale Ale","Bock","Grisette","Milk / Sweet Stout","American Pale Lager","Scottish Ale","American Wild Ale","Euro Dark Lager","Maibock / Helles Bock","American Dark Wheat Ale","Irish Red Ale","Oatmeal Stout","Saison / Farmhouse Ale","Belgian Dark Ale","American Brown Ale","English Bitter","Schwarzbier","English Pale Ale","American Porter","Czech Pilsener","Altbier","German Pilsener","Smoked Beer","American Amber / Red Ale","Foreign / Export Stout","Irish Dry Stout","Old Ale","California Common / Steam Beer","American Stout","American Pale Ale (APA)","Extra Special / Strong Bitter (ESB)","American White IPA","Rye Beer","Baltic Porter","English Strong Ale","English India Pale Ale (IPA)","Belgian IPA","American Double / Imperial Stout","American India Pale Lager","American Strong Ale","English Stout","English Barleywine","American IPA","American Black Ale","Belgian Strong Dark Ale","American Double / Imperial Pilsner","Russian Imperial Stout","American Double / Imperial IPA","American Barleywine"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"ABV"},"hovermode":"closest","showlegend":false},"source":"A","config":{"showSendToCloud":false},"data":[{"fillcolor":"rgba(31,119,180,0.5)","x":["American IPA","Milk / Sweet Stout","English Brown Ale","Pumpkin Ale","American Porter","Extra Special / Strong Bitter (ESB)","American Double / Imperial IPA","English Barleywine","Milk / Sweet Stout","American Pale Ale (APA)","German Pilsener","Pumpkin Ale","Belgian Pale Ale","American Pilsner","American Double / Imperial IPA","Saison / Farmhouse Ale","American IPA","English Brown Ale","Keller Bier / Zwickel Bier","American Pale Lager","American India Pale Lager","American India Pale Lager","American India Pale Lager","American Double / Imperial IPA","American IPA","Wheat Ale","American Double / Imperial IPA","Cream Ale","KÃ¶lsch","American Pale Wheat Ale","American Amber / Red Ale","KÃ¶lsch","American IPA","Russian Imperial Stout","American Porter","American Stout","American Pale Lager","American Amber / Red Ale","Dubbel","American IPA","American IPA","Foreign / Export Stout","American IPA","American Brown Ale","American Blonde Ale","American IPA","American Pale Ale (APA)","American IPA","American IPA","Scotch Ale / Wee Heavy","American IPA","American IPA","American Blonde Ale","American IPA","American Porter","Fruit / Vegetable Beer","Russian Imperial Stout","American Double / Imperial IPA","American IPA","Irish Red Ale","American Porter","Czech Pilsener","Rye Beer","American IPA","American Pale Wheat Ale","Oatmeal Stout","American Pale Ale (APA)","California Common / Steam Beer","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Pale Wheat Ale","American IPA","American Pale Ale (APA)","Altbier","American Porter","Belgian Pale Ale","Scotch Ale / Wee Heavy","Belgian Dark Ale","Scotch Ale / Wee Heavy","Scotch Ale / Wee Heavy","American IPA","American IPA","American IPA","American IPA","Scotch Ale / Wee Heavy","Extra Special / Strong Bitter (ESB)","American IPA","American Pale Ale (APA)","Russian Imperial Stout","Flanders Oud Bruin","Irish Dry Stout","Scottish Ale","English Barleywine","Quadrupel (Quad)","MÃ¤rzen / Oktoberfest","Dortmunder / Export Lager","Dortmunder / Export Lager","American Double / Imperial IPA","Scotch Ale / Wee Heavy","American IPA","MÃ¤rzen / Oktoberfest","English Barleywine","Scottish Ale","Cream Ale","American Pale Ale (APA)","American Blonde Ale","Belgian IPA","Czech Pilsener","American IPA","American IPA","English Strong Ale","KÃ¶lsch","Belgian Dark Ale","Dubbel","American Double / Imperial IPA","American IPA","Smoked Beer","American Pale Ale (APA)","Cream Ale","American Porter","Winter Warmer","American Double / Imperial IPA","American Blonde Ale","American Amber / Red Ale","Hefeweizen","American IPA","American Porter","American Pale Ale (APA)","Fruit / Vegetable Beer","American Pale Ale (APA)","American IPA","Hefeweizen","American Pale Ale (APA)","American Amber / Red Ale","American IPA","American Pale Ale (APA)","English Brown Ale","American Double / Imperial IPA","American IPA","KÃ¶lsch","American IPA","American IPA","Czech Pilsener","KÃ¶lsch","German Pilsener","Witbier","American IPA","American Brown Ale","American Amber / Red Lager","American IPA","American Adjunct Lager","American Porter","American IPA","Gose","German Pilsener","American IPA","American Pale Ale (APA)","Herbed / Spiced Beer","Herbed / Spiced Beer","MÃ¤rzen / Oktoberfest","American Porter","American IPA","Witbier","Tripel","Saison / Farmhouse Ale","American Porter","Saison / Farmhouse Ale","Oatmeal Stout","American IPA","American Brown Ale","Extra Special / Strong Bitter (ESB)","Milk / Sweet Stout","American Pale Wheat Ale","American Pale Wheat Ale","German Pilsener","American Double / Imperial IPA","American Brown Ale","Milk / Sweet Stout","American IPA","Baltic Porter","Gose","Fruit / Vegetable Beer","American IPA","American Pale Ale (APA)","American Double / Imperial IPA","American Strong Ale","American IPA","German Pilsener","Cream Ale","Rye Beer","American IPA","Baltic Porter","American Brown Ale","American Pale Wheat Ale","Saison / Farmhouse Ale","American Double / Imperial IPA","American Stout","Pumpkin Ale","German Pilsener","Cream Ale","Rye Beer","American IPA","American IPA","American IPA","American Blonde Ale","German Pilsener","American IPA","American Wild Ale","American Double / Imperial Stout","American White IPA","American Wild Ale","American Double / Imperial IPA","Belgian Pale Ale","Vienna Lager","Vienna Lager","English India Pale Ale (IPA)","American Blonde Ale","American Pale Ale (APA)","Hefeweizen","Abbey Single Ale","American IPA","Gose","American Double / Imperial IPA","Abbey Single Ale","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American Double / Imperial IPA","Berliner Weissbier","American Blonde Ale","American Pale Wheat Ale","American Black Ale","American IPA","American IPA","English Bitter","Rye Beer","American Brown Ale","American Brown Ale","American Double / Imperial IPA","Keller Bier / Zwickel Bier","Saison / Farmhouse Ale","American IPA","American IPA","American Brown Ale","American Pale Ale (APA)","Belgian Strong Pale Ale","Witbier","American Amber / Red Ale","Berliner Weissbier","","American Brown Ale","Munich Helles Lager","Witbier","American IPA","Berliner Weissbier","American IPA","American Blonde Ale","American IPA","American Porter","Rye Beer","American IPA","American Blonde Ale","American Porter","American Pale Ale (APA)","American Double / Imperial IPA","Gose","American Double / Imperial IPA","American Porter","American Blonde Ale","American IPA","Munich Helles Lager","American IPA","American Dark Wheat Ale","American Dark Wheat Ale","Dortmunder / Export Lager","American Pale Ale (APA)","MÃ¤rzen / Oktoberfest","American Strong Ale","American IPA","Extra Special / Strong Bitter (ESB)","American IPA","American Black Ale","German Pilsener","American IPA","American Brown Ale","American Amber / Red Ale","Radler","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Amber / Red Ale","American Stout","American IPA","American Strong Ale","American White IPA","American Amber / Red Ale","American Strong Ale","Czech Pilsener","American IPA","American IPA","American IPA","American Pale Lager","Euro Dark Lager","American Amber / Red Ale","American Pale Lager","American Amber / Red Ale","American Pale Lager","American IPA","American Amber / Red Ale","American IPA","American Amber / Red Ale","American IPA","American Pale Ale (APA)","American Pale Wheat Ale","Czech Pilsener","American IPA","American Pale Ale (APA)","American Double / Imperial IPA","American IPA","American Pale Wheat Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","American Blonde Ale","Fruit / Vegetable Beer","KÃ¶lsch","American Pale Ale (APA)","American IPA","American Brown Ale","American Amber / Red Ale","American Amber / Red Ale","American Pale Ale (APA)","American Amber / Red Ale","American Porter","MÃ¤rzen / Oktoberfest","American Pale Ale (APA)","American IPA","American Blonde Ale","American IPA","Cream Ale","American Amber / Red Ale","American Pilsner","Doppelbock","American IPA","American IPA","American Pale Ale (APA)","American Double / Imperial IPA","American Double / Imperial IPA","KÃ¶lsch","American IPA","American Amber / Red Ale","American Amber / Red Ale","American IPA","Hefeweizen","Fruit / Vegetable Beer","American Pale Ale (APA)","American IPA","Other","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Ale (APA)","American White IPA","American IPA","American IPA","Scotch Ale / Wee Heavy","Czech Pilsener","MÃ¤rzen / Oktoberfest","English India Pale Ale (IPA)","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American IPA","Fruit / Vegetable Beer","American IPA","American Pilsner","American Pale Ale (APA)","Russian Imperial Stout","American IPA","American Double / Imperial IPA","American Blonde Ale","American IPA","Cream Ale","American Blonde Ale","American IPA","Hefeweizen","American Pale Ale (APA)","American IPA","American Amber / Red Ale","Saison / Farmhouse Ale","American Pilsner","American IPA","American Pale Lager","Witbier","Euro Dark Lager","American Pilsner","American Pale Ale (APA)","American Double / Imperial IPA","American Pale Ale (APA)","BiÃ¨re de Garde","American Double / Imperial IPA","American Double / Imperial IPA","American Double / Imperial IPA","Old Ale","American Blonde Ale","American Double / Imperial IPA","BiÃ¨re de Garde","Foreign / Export Stout","American Pale Ale (APA)","American Blonde Ale","American Pale Ale (APA)","KÃ¶lsch","American Amber / Red Lager","American IPA","Hefeweizen","American IPA","Fruit / Vegetable Beer","Altbier","American Amber / Red Lager","Altbier","American Pale Ale (APA)","American Pale Wheat Ale","Pumpkin Ale","Czech Pilsener","American Amber / Red Ale","American Pale Ale (APA)","American IPA","Hefeweizen","Munich Dunkel Lager","American Pale Ale (APA)","MÃ¤rzen / Oktoberfest","KÃ¶lsch","Saison / Farmhouse Ale","American Double / Imperial IPA","American Amber / Red Lager","Hefeweizen","American IPA","American IPA","Maibock / Helles Bock","American Brown Ale","American Double / Imperial IPA","Saison / Farmhouse Ale","American Blonde Ale","American IPA","Gose","Witbier","American Black Ale","American Blonde Ale","German Pilsener","American Blonde Ale","American Blonde Ale","American Adjunct Lager","American Amber / Red Lager","Light Lager","American Adjunct Lager","American Adjunct Lager","American Pale Ale (APA)","American Adjunct Lager","American Black Ale","American IPA","American Adjunct Lager","American Adjunct Lager","American Adjunct Lager","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","American Pale Wheat Ale","American Pale Wheat Ale","KÃ¶lsch","MÃ¤rzen / Oktoberfest","American Brown Ale","American Pale Wheat Ale","American Pale Ale (APA)","American Amber / Red Lager","American Adjunct Lager","American IPA","Chile Beer","American IPA","American IPA","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American Blonde Ale","American Amber / Red Ale","Oatmeal Stout","American Blonde Ale","American Pale Ale (APA)","American Pale Wheat Ale","Munich Helles Lager","Munich Dunkel Lager","Czech Pilsener","American Pale Ale (APA)","Czech Pilsener","American Pale Wheat Ale","American Pale Ale (APA)","American Amber / Red Ale","American Pale Ale (APA)","Witbier","Bock","American IPA","American Black Ale","American IPA","American IPA","American IPA","American IPA","American IPA","American IPA","American IPA","American Porter","English Brown Ale","American Brown Ale","American Amber / Red Ale","American IPA","Witbier","American Pale Wheat Ale","Light Lager","American Pilsner","Milk / Sweet Stout","German Pilsener","American Pale Wheat Ale","Cream Ale","American Pale Wheat Ale","American Porter","Bock","MÃ¤rzen / Oktoberfest","Altbier","Belgian Strong Dark Ale","Scotch Ale / Wee Heavy","American Porter","American Pale Ale (APA)","Hefeweizen","American Brown Ale","American IPA","American Amber / Red Ale","American Stout","American IPA","American IPA","American Porter","Fruit / Vegetable Beer","American Blonde Ale","American Pale Ale (APA)","American Amber / Red Ale","American Blonde Ale","American Porter","American IPA","American IPA","American Pale Ale (APA)","American Adjunct Lager","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Amber / Red Ale","American IPA","American Pale Ale (APA)","American Black Ale","American IPA","American Pilsner","Pumpkin Ale","American Amber / Red Lager","American IPA","American IPA","American Blonde Ale","Schwarzbier","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","KÃ¶lsch","","Fruit / Vegetable Beer","American IPA","Scottish Ale","Saison / Farmhouse Ale","American Stout","American Amber / Red Ale","American IPA","Saison / Farmhouse Ale","English Brown Ale","KÃ¶lsch","American Blonde Ale","Fruit / Vegetable Beer","American Porter","American IPA","Dortmunder / Export Lager","American Blonde Ale","American Porter","MÃ¤rzen / Oktoberfest","American Brown Ale","Fruit / Vegetable Beer","Dortmunder / Export Lager","American Dark Wheat Ale","Witbier","American Stout","English Stout","American Porter","Euro Dark Lager","English Dark Mild Ale","American IPA","American Blonde Ale","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","Czech Pilsener","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Strong Ale","American Double / Imperial IPA","American Double / Imperial IPA","Russian Imperial Stout","Czech Pilsener","American Double / Imperial IPA","Scottish Ale","American Double / Imperial IPA","American Pale Ale (APA)","American Pilsner","American Pale Ale (APA)","American Blonde Ale","American IPA","American IPA","Oatmeal Stout","Cream Ale","American IPA","American Amber / Red Ale","Oatmeal Stout","Vienna Lager","American Amber / Red Ale","Cream Ale","Oatmeal Stout","Winter Warmer","American IPA","American Amber / Red Ale","Cream Ale","American Pale Ale (APA)","American Double / Imperial IPA","American Porter","American Pale Ale (APA)","American Pale Ale (APA)","Winter Warmer","American IPA","Belgian Pale Ale","Scotch Ale / Wee Heavy","American Pilsner","American Pale Ale (APA)","American Blonde Ale","American Amber / Red Ale","American IPA","American Amber / Red Ale","American Blonde Ale","American Strong Ale","English Brown Ale","American Amber / Red Ale","American Pale Ale (APA)","American IPA","Baltic Porter","English Bitter","Keller Bier / Zwickel Bier","American Pale Ale (APA)","Light Lager","American Pilsner","American Blonde Ale","American IPA","American IPA","American IPA","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","American Brown Ale","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","Foreign / Export Stout","English Brown Ale","Vienna Lager","American Pale Ale (APA)","American IPA","American Black Ale","Vienna Lager","Munich Helles Lager","American IPA","Munich Helles Lager","American IPA","American Pale Ale (APA)","American IPA","American Pale Lager","American Blonde Ale","American Strong Ale","American IPA","American Blonde Ale","American Pale Lager","American IPA","American IPA","American Blonde Ale","American IPA","KÃ¶lsch","American Double / Imperial IPA","American IPA","American Pale Ale (APA)","American Amber / Red Ale","American Amber / Red Ale","American IPA","Witbier","American IPA","American IPA","American Blonde Ale","American Porter","American Amber / Red Ale","American Pale Ale (APA)","American IPA","American IPA","American IPA","American Amber / Red Ale","Doppelbock","American IPA","American IPA","American Pale Ale (APA)","American Amber / Red Ale","Saison / Farmhouse Ale","American Pale Wheat Ale","American Stout","American Amber / Red Ale","American IPA","American IPA","American Pale Wheat Ale","English Brown Ale","American Pale Ale (APA)","American Blonde Ale","Witbier","American Double / Imperial IPA","Saison / Farmhouse Ale","American Brown Ale","Dunkelweizen","English India Pale Ale (IPA)","Witbier","American IPA","Cream Ale","American Pilsner","American IPA","American Porter","American Porter","American IPA","Hefeweizen","American Strong Ale","American Double / Imperial IPA","American Amber / Red Ale","American IPA","American Amber / Red Ale","American Black Ale","Berliner Weissbier","American Double / Imperial IPA","American IPA","American IPA","American IPA","Witbier","American Brown Ale","American IPA","American Pale Ale (APA)","American IPA","Witbier","American Strong Ale","MÃ¤rzen / Oktoberfest","American Blonde Ale","Hefeweizen","American Double / Imperial IPA","American IPA","American IPA","American Blonde Ale","American Amber / Red Ale","Pumpkin Ale","American Double / Imperial IPA","American IPA","German Pilsener","American Amber / Red Ale","American Porter","Hefeweizen","American Pale Ale (APA)","American Double / Imperial IPA","American Adjunct Lager","Herbed / Spiced Beer","American White IPA","KÃ¶lsch","American IPA","Pumpkin Ale","MÃ¤rzen / Oktoberfest","American IPA","KÃ¶lsch","American Pale Wheat Ale","KÃ¶lsch","American IPA","American Stout","KÃ¶lsch","American IPA","American Pale Ale (APA)","American Pale Ale (APA)","Cream Ale","American IPA","American Pilsner","American Pale Lager","Saison / Farmhouse Ale","American IPA","American IPA","American IPA","American IPA","Hefeweizen","American IPA","American IPA","American Brown Ale","American IPA","American IPA","American IPA","Hefeweizen","Dunkelweizen","American Blonde Ale","American Amber / Red Ale","American IPA","Cream Ale","German Pilsener","Saison / Farmhouse Ale","English Dark Mild Ale","Belgian Pale Ale","Belgian Pale Ale","American Porter","American IPA","American IPA","American Blonde Ale","Fruit / Vegetable Beer","American Pale Ale (APA)","American IPA","American Double / Imperial IPA","American IPA","Munich Helles Lager","American Black Ale","American Pale Wheat Ale","American Amber / Red Ale","Bock","American IPA","KÃ¶lsch","California Common / Steam Beer","American IPA","Schwarzbier","German Pilsener","American Pale Ale (APA)","American Pale Ale (APA)","American IPA","American Stout","American Pale Lager","Extra Special / Strong Bitter (ESB)","American IPA","American IPA","American Amber / Red Ale","American Pale Wheat Ale","American Amber / Red Ale","American Blonde Ale","English India Pale Ale (IPA)","American Amber / Red Ale","Altbier","Fruit / Vegetable Beer","Altbier","American Pale Ale (APA)","American Pale Ale (APA)","Altbier","American Double / Imperial IPA","American Double / Imperial IPA","Irish Red Ale","American IPA","American White IPA","American Blonde Ale","Extra Special / Strong Bitter (ESB)","American IPA","Winter Warmer","Fruit / Vegetable Beer","American Pale Wheat Ale","American Black Ale","American Pale Ale (APA)","English India Pale Ale (IPA)","American Pale Ale (APA)","Belgian IPA","American Pale Lager","American Double / Imperial IPA","American IPA","Irish Dry Stout","American IPA","English Pale Mild Ale","American Double / Imperial IPA","American Amber / Red Ale","American IPA","Saison / Farmhouse Ale","Vienna Lager","American Amber / Red Ale","Witbier","Scottish Ale","American Pale Ale (APA)","American IPA","American Porter","American Blonde Ale","Witbier","American IPA","American Pale Ale (APA)","KÃ¶lsch","American IPA","American IPA","Vienna Lager","Hefeweizen","American Amber / Red Ale","American Pale Ale (APA)","American IPA","American Strong Ale","American Porter","Saison / Farmhouse Ale","American Amber / Red Ale","American IPA","American IPA","American IPA","American Double / Imperial IPA","English Pale Ale","American IPA","Pumpkin Ale","Fruit / Vegetable Beer","American IPA","Radler","Hefeweizen","Hefeweizen","Saison / Farmhouse Ale","American Brown Ale","American IPA","American Stout","American Amber / Red Ale","Fruit / Vegetable Beer","American IPA","American IPA","American IPA","American Blonde Ale","Radler","American IPA","Vienna Lager","Vienna Lager","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","Vienna Lager","American Brown Ale","Pumpkin Ale","American Double / Imperial IPA","American Double / Imperial IPA","Fruit / Vegetable Beer","Hefeweizen","Fruit / Vegetable Beer","American Double / Imperial IPA","American Double / Imperial IPA","American Pale Ale (APA)","American IPA","American Pale Ale (APA)","American Brown Ale","American IPA","Irish Red Ale","American Pale Wheat Ale","American IPA","American IPA","American Barleywine","American Pale Ale (APA)","American Pale Wheat Ale","American Strong Ale","American IPA","American IPA","American Pale Ale (APA)","American Amber / Red Ale","American IPA","Chile Beer","Fruit / Vegetable Beer","American Blonde Ale","American Porter","American Dark Wheat Ale","American Amber / Red Ale","American IPA","Rye Beer","American Amber / Red Ale","American IPA","American IPA","American Pale Ale (APA)","Tripel","Witbier","American Brown Ale","Belgian Strong Pale Ale","American IPA","American Double / Imperial Pilsner","American IPA","American Pale Ale (APA)","Munich Helles Lager","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","Schwarzbier","German Pilsener","American IPA","American Pale Ale (APA)","American Black Ale","American Pale Ale (APA)","American Amber / Red Ale","Hefeweizen","American IPA","American Pale Ale (APA)","Scottish Ale","American IPA","American IPA","English Pale Ale","American Pale Wheat Ale","American Brown Ale","English Strong Ale","American Brown Ale","American Pale Wheat Ale","American IPA","English Pale Ale","American Pale Wheat Ale","American Brown Ale","Pumpkin Ale","American IPA","Hefeweizen","English Brown Ale","American Pale Ale (APA)","American IPA","American IPA","Euro Dark Lager","American IPA","Czech Pilsener","American IPA","Cream Ale","American Pale Ale (APA)","American IPA","American IPA","American IPA","American Double / Imperial IPA","American IPA","American Blonde Ale","American Brown Ale","American Pale Ale (APA)","Herbed / Spiced Beer","American IPA","American Double / Imperial IPA","American Black Ale","MÃ¤rzen / Oktoberfest","American IPA","American IPA","Belgian Pale Ale","American Pale Wheat Ale","Tripel","Fruit / Vegetable Beer","American Double / Imperial IPA","American Pale Ale (APA)","American IPA","Pumpkin Ale","MÃ¤rzen / Oktoberfest","American Pale Wheat Ale","Tripel","American Amber / Red Ale","American Double / Imperial IPA","American Blonde Ale","American Double / Imperial IPA","American Double / Imperial IPA","Witbier","Oatmeal Stout","American Pale Ale (APA)","American Pale Ale (APA)","Czech Pilsener","American Blonde Ale","American Amber / Red Ale","Saison / Farmhouse Ale","Fruit / Vegetable Beer","American Brown Ale","Vienna Lager","Irish Red Ale","Witbier","Irish Red Ale","American Pale Ale (APA)","Rye Beer","American Brown Ale","American IPA","MÃ¤rzen / Oktoberfest","American Amber / Red Ale","American Stout","American Pale Ale (APA)","Irish Red Ale","American Blonde Ale","American Pale Wheat Ale","American Stout","American Pale Ale (APA)","American Pilsner","American Barleywine","Winter Warmer","American Pale Ale (APA)","Fruit / Vegetable Beer","Fruit / Vegetable Beer","Fruit / Vegetable Beer","American IPA","American IPA","American IPA","English Strong Ale","American Double / Imperial IPA","American Pale Ale (APA)","Winter Warmer","American Black Ale","Belgian Dark Ale","American IPA","Fruit / Vegetable Beer","American IPA","American IPA","Winter Warmer","Grisette","Munich Helles Lager","Winter Warmer","American Double / Imperial IPA","MÃ¤rzen / Oktoberfest","American IPA","Munich Dunkel Lager","Hefeweizen","German Pilsener","American Pale Ale (APA)","American Stout","American Double / Imperial IPA","American Porter","American Amber / Red Ale","American Brown Ale","American Amber / Red Ale","Witbier","American IPA","American Pale Wheat Ale","Munich Helles Lager","American Porter","American IPA","American Strong Ale","American IPA","American Stout","American Pale Ale (APA)","Witbier","American Porter","American Pale Ale (APA)","Cream Ale","Extra Special / Strong Bitter (ESB)","Extra Special / Strong Bitter (ESB)","Extra Special / Strong Bitter (ESB)","American Pale Ale (APA)","American Pale Ale (APA)","Extra Special / Strong Bitter (ESB)","Euro Pale Lager","American Pale Ale (APA)","German Pilsener","American IPA","MÃ¤rzen / Oktoberfest","American IPA","Gose","Witbier","American IPA","American IPA","American Double / Imperial IPA","American Double / Imperial IPA","American Double / Imperial IPA","Russian Imperial Stout","American Double / Imperial IPA","Scottish Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Wheat Ale","American IPA","American Amber / Red Ale","Saison / Farmhouse Ale","American Black Ale","Fruit / Vegetable Beer","American Brown Ale","American IPA","American Blonde Ale","Altbier","American Pale Ale (APA)","American Amber / Red Ale","American Black Ale","American Amber / Red Lager","American Black Ale","American Amber / Red Ale","American Blonde Ale","American IPA","American Pale Lager","American Stout","Belgian Pale Ale","Roggenbier","KÃ¶lsch","American IPA","Berliner Weissbier","American Double / Imperial IPA","American Double / Imperial IPA","KÃ¶lsch","Milk / Sweet Stout","American IPA","KÃ¶lsch","American Blonde Ale","American Brown Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Black Ale","American Pale Wheat Ale","Saison / Farmhouse Ale","American Black Ale","American Pale Lager","Cream Ale","American IPA","American Double / Imperial Stout","Belgian IPA","American Pale Ale (APA)","American Double / Imperial Stout","Saison / Farmhouse Ale","American Pale Wheat Ale","American IPA","American Brown Ale","Hefeweizen","Munich Helles Lager","American IPA","American IPA","Czech Pilsener","American IPA","KÃ¶lsch","Scotch Ale / Wee Heavy","Extra Special / Strong Bitter (ESB)","Czech Pilsener","American IPA","English India Pale Ale (IPA)","English India Pale Ale (IPA)","American Amber / Red Lager","American Amber / Red Lager","American Amber / Red Lager","American Amber / Red Lager","Irish Red Ale","American Pale Ale (APA)","KÃ¶lsch","English Bitter","American Porter","American IPA","Fruit / Vegetable Beer","American Pale Ale (APA)","Rye Beer","American Double / Imperial IPA","Oatmeal Stout","American IPA","American IPA","Witbier","American Pale Ale (APA)","Oatmeal Stout","Cream Ale","American Porter","Witbier","American Pale Ale (APA)","American Double / Imperial IPA","American IPA","American IPA","Hefeweizen","American Blonde Ale","American Blonde Ale","Hefeweizen","American Pale Ale (APA)","Irish Dry Stout","American Blonde Ale","American IPA","Irish Red Ale","American Pale Ale (APA)","American Amber / Red Ale","American IPA","English Brown Ale","American Pale Wheat Ale","American Blonde Ale","Saison / Farmhouse Ale","American Pale Ale (APA)","American Pale Ale (APA)","American IPA","Gose","American Amber / Red Lager","American Amber / Red Lager","American IPA","American Pale Wheat Ale","American Pale Ale (APA)","American Pale Ale (APA)","Scottish Ale","American Brown Ale","Saison / Farmhouse Ale","American Pale Ale (APA)","American Stout","Rye Beer","American Amber / Red Ale","KÃ¶lsch","American Brown Ale","American IPA","Fruit / Vegetable Beer","Munich Helles Lager","American Pale Ale (APA)","American Double / Imperial IPA","Oatmeal Stout","American IPA","American Brown Ale","American IPA","MÃ¤rzen / Oktoberfest","American IPA","English Pale Ale","English Pale Ale","American Double / Imperial IPA","American IPA","German Pilsener","American Blonde Ale","American IPA","American Pale Ale (APA)","American Amber / Red Ale","American Amber / Red Ale","American IPA","American IPA","American Amber / Red Ale","American White IPA","American Blonde Ale","Vienna Lager","American IPA","American Amber / Red Ale","American IPA","Scotch Ale / Wee Heavy","American Amber / Red Ale","American Pale Ale (APA)","American IPA","American IPA","American Porter","American IPA","Fruit / Vegetable Beer","Hefeweizen","American Amber / Red Ale","Vienna Lager","Vienna Lager","American Pale Wheat Ale","American Double / Imperial IPA","Russian Imperial Stout","Russian Imperial Stout","Scottish Ale","Scottish Ale","Scottish Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Ale (APA)","American Double / Imperial IPA","American Dark Wheat Ale","American IPA","American Porter","Scotch Ale / Wee Heavy","American IPA","American IPA","American Pale Ale (APA)","American IPA","Scotch Ale / Wee Heavy","Oatmeal Stout","American Black Ale","American Amber / Red Lager","American Pale Ale (APA)","Czech Pilsener","American IPA","American IPA","American IPA","American Pale Lager","American Blonde Ale","American IPA","Munich Helles Lager","American Pilsner","American Blonde Ale","American IPA","American Pale Ale (APA)","KÃ¶lsch","American Porter","American IPA","American Black Ale","American Amber / Red Ale","Herbed / Spiced Beer","Schwarzbier","American IPA","Fruit / Vegetable Beer","American Amber / Red Lager","American Pale Wheat Ale","American Pale Ale (APA)","American Pale Ale (APA)","American Pale Wheat Ale","American Pale Lager","American Pale Lager","Hefeweizen","Hefeweizen","Maibock / Helles Bock","KÃ¶lsch","American Brown Ale","American IPA"],"y":[0.045,0.049,0.048,0.06,0.06,0.056,0.08,0.125,0.077,0.042,0.05,0.066,0.04,0.055,0.076,0.051,0.06,0.05,0.052,0.048,0.072,0.067,0.049,0.08,0.075,0.06,0.08,0.063,0.058,0.047,0.056,0.046,0.063,0.095,0.065,0.08,0.041,0.059,0.069,0.067,0.048,0.06,0.07,0.055,0.048,0.065,0.05,0.05,0.058,0.085,0.072,0.047,0.05,0.06,0.058,0.052,0.12,0.085,0.058,0.051,0.052,0.045,0.072,0.07,0.055,0.055,0.054,0.053,0.064,0.058,0.055,0.099,0.068,0.072,0.055,0.052,0.054,0.058,0.083,0.099,0.09,0.053,0.064,0.063,0.064,0.064,0.09,0.065,0.075,0.056,0.099,0.063,0.071,0.054,0.099,0.09,0.055,0.052,0.052,0.091,0.09,0.075,0.055,0.099,0.054,0.053,0.056,0.049,0.07,0.054,0.05,0.069,0.09,0.046,0.052,0.08,0.085,0.068,0.051,0.051,0.05,0.069,0.095,0.091,0.05,0.055,0.05,0.07,0.069,0.055,0.05,0.055,0.07,0.05,0.055,0.055,0.062,0.052,0.069,0.099,0.038,0.052,0.07,0.07,0.055,0.048,0.047,0.056,0.063,0.055,0.054,0.075,0.051,0.07,0.075,0.046,0.048,0.05,0.055,0.058,0.061,0.057,0.068,0.065,0.05,0.085,0.048,0.062,0.056,0.05,0.068,0.044,0.072,0.05,0.05,0.05,0.05,0.072,0.044,0.05,0.063,0.1,0.042,0.032,0.065,0.047,0.099,0.07,0.067,0.054,0.052,0.063,0.064,0.099,0.059,0.052,0.049,0.091,0.063,0.06,0.054,0.052,0.063,0.064,0.045,0.075,0.047,0.055,0.07,0.068,0.099,0.065,0.075,0.099,0.075,0.048,0.048,0.044,0.057,0.054,0.052,0.049,0.063,0.05,0.096,0.049,0.053,0.047,0.083,0.035,0.045,0.05,0.099,0.073,0.075,0.04,0.055,0.051,0.051,0.097,0.051,0.067,0.062,0.082,0.05,0.06,0.075,0.052,0.052,0.043,0.053,0.065,0.042,0.042,0.059,0.044,0.07,0.051,0.055,0.047,0.058,0.071,0.047,0.06,0.055,0.085,0.042,0.075,0.055,0.045,0.05,0.05,0.063,0.058,0.058,0.051,0.051,0.077,0.07,0.072,0.056,0.062,0.06,0.05,0.047,0.048,0.046,0.027,0.039,0.039,0.039,0.039,0.039,0.039,0.039,0.039,0.039,0.039,0.039,0.039,0.058,0.058,0.066,0.073,0.06,0.058,0.073,0.051,0.066,0.045,0.065,0.05,0.056,0.052,0.05,0.052,0.05,0.065,0.052,0.065,0.052,0.072,0.056,0.048,0.05,0.072,0.056,0.085,0.063,0.048,0.054,0.054,0.042,0.042,0.042,0.043,0.079,0.047,0.05,0.069,0.07,0.06,0.057,0.055,0.06,0.058,0.052,0.043,0.072,0.048,0.052,0.054,0.075,0.045,0.082,0.075,0.068,0.048,0.092,0.089,0.046,0.065,0.052,0.052,0.06,0.057,0.05,0.058,0.068,0.048,0.057,0.05,0.057,0.07,0.067,0.066,0.075,0.048,0.056,0.07,0.048,0.053,0.066,0.051,0.065,0.028,0.05,0.09,0.07,0.099,0.05,0.07,0.052,0.045,0.075,0.05,0.058,0.07,0.058,0.062,0.049,0.067,0.068,0.05,0.051,0.04,0.053,0.082,0.065,0.069,0.085,0.092,0.085,0.072,0.05,0.099,0.069,0.083,0.065,0.05,0.065,0.049,0.057,0.065,0.051,0.057,0.057,0.05,0.045,0.05,0.052,0.045,0.05,0.05,0.065,0.05,0.04,0.052,0.058,0.055,0.055,0.047,0.066,0.095,0.049,0.052,0.066,0.06,0.047,0.075,0.085,0.048,0.052,0.07,0.044,0.046,0.099,0.051,0.053,0.06,0.051,0.041,0.041,0.032,0.047,0.047,0.054,0.047,0.052,0.063,0.047,0.047,0.047,0.057,0.052,0.05,0.05,0.049,0.057,0.054,0.05,0.054,0.047,0.047,0.075,0.049,0.075,0.077,0.053,0.058,0.05,0.08,0.058,0.05,0.058,0.059,0.069,0.06,0.058,0.057,0.058,0.059,0.053,0.048,0.055,0.059,0.055,0.062,0.082,0.07,0.07,0.07,0.07,0.07,0.075,0.075,0.08,0.055,0.055,0.072,0.075,0.05,0.048,0.037,0.052,0.053,0.086,0.042,0.05,0.042,0.07,0.065,0.055,0.063,0.092,0.087,0.054,0.057,0.058,0.061,0.067,0.054,0.058,0.067,0.07,0.07,0.05,0.045,0.055,0.045,0.04,0.062,0.062,0.068,0.056,0.039,0.054,0.061,0.061,0.056,0.056,0.056,0.056,0.056,0.054,0.061,0.057,0.067,0.061,0.053,0.05,0.04,0.04,0.073,0.04,0.04,0.073,0.04,0.04,0.052,0.06,0.042,0.067,0.06,0.05,0.065,0.05,0.06,0.071,0.056,0.045,0.053,0.057,0.056,0.062,0.057,0.053,0.056,0.057,0.045,0.057,0.057,0.06,0.051,0.075,0.08,0.056,0.057,0.042,0.062,0.053,0.049,0.065,0.065,0.053,0.065,0.065,0.065,0.087,0.065,0.065,0.087,0.08,0.09,0.087,0.099,0.053,0.099,0.08,0.087,0.065,0.063,0.07,0.049,0.043,0.062,0.057,0.056,0.07,0.058,0.057,0.055,0.058,0.056,0.057,0.069,0.07,0.058,0.056,0.055,0.082,0.055,0.058,0.061,0.059,0.07,0.068,0.057,0.045,0.051,0.053,0.063,0.068,0.063,0.053,0.077,0.053,0.077,0.06,0.07,0.082,0.049,0.048,0.048,0.04,0.05,0.052,0.07,0.041,0.048,0.052,0.062,0.062,0.057,0.054,0.052,0.062,0.048,0.06,0.054,0.05,0.05,0.052,0.068,0.065,0.052,0.046,0.056,0.046,0.062,0.055,0.059,0.05,0.049,0.078,0.063,0.049,0.048,0.065,0.065,0.049,0.069,0.045,0.077,0.069,0.06,0.075,0.075,0.045,0.045,0.072,0.072,0.042,0.052,0.052,0.054,0.065,0.062,0.074,0.052,0.075,0.075,0.068,0.052,0.067,0.055,0.047,0.058,0.065,0.071,0.048,0.043,0.049,0.055,0.06,0.06,0.09,0.055,0.063,0.056,0.071,0.05,0.069,0.05,0.048,0.064,0.06,0.057,0.07,0.06,0.081,0.095,0.067,0.069,0.058,0.099,0.039,0.078,0.042,0.063,0.063,0.048,0.05,0.057,0.063,0.07,0.05,0.08,0.055,0.05,0.053,0.092,0.065,0.072,0.049,0.05,0.099,0.09,0.055,0.054,0.055,0.071,0.05,0.05,0.093,0.052,0.052,0.062,0.05,0.059,0.059,0.055,0.059,0.05,0.048,0.05,0.059,0.06,0.05,0.07,0.044,0.052,0.042,0.062,0.045,0.072,0.058,0.074,0.08,0.094,0.059,0.046,0.068,0.059,0.055,0.08,0.08,0.059,0.046,0.056,0.056,0.052,0.07,0.055,0.052,0.06,0.038,0.051,0.045,0.055,0.065,0.07,0.052,0.065,0.055,0.06,0.089,0.069,0.055,0.08,0.05,0.08,0.07,0.055,0.05,0.054,0.067,0.05,0.054,0.04,0.055,0.068,0.058,0.042,0.057,0.068,0.062,0.06,0.05,0.055,0.049,0.059,0.046,0.072,0.04,0.046,0.052,0.053,0.053,0.08,0.08,0.053,0.06,0.055,0.056,0.06,0.068,0.065,0.05,0.046,0.065,0.054,0.055,0.053,0.076,0.062,0.088,0.042,0.04,0.045,0.05,0.087,0.051,0.075,0.065,0.048,0.051,0.048,0.078,0.06,0.076,0.057,0.052,0.05,0.068,0.052,0.048,0.069,0.073,0.055,0.07,0.055,0.049,0.069,0.071,0.071,0.078,0.066,0.04,0.06,0.056,0.085,0.051,0.04,0.052,0.045,0.06,0.049,0.049,0.049,0.042,0.047,0.058,0.058,0.057,0.052,0.065,0.065,0.065,0.05,0.045,0.065,0.049,0.049,0.053,0.053,0.049,0.065,0.046,0.09,0.09,0.051,0.055,0.051,0.08,0.088,0.042,0.062,0.048,0.055,0.072,0.05,0.055,0.063,0.063,0.099,0.052,0.046,0.084,0.063,0.065,0.055,0.058,0.071,0.06,0.06,0.045,0.055,0.045,0.055,0.07,0.045,0.035,0.067,0.05,0.055,0.092,0.079,0.075,0.092,0.073,0.075,0.069,0.057,0.056,0.049,0.047,0.046,0.05,0.046,0.052,0.057,0.063,0.063,0.054,0.072,0.05,0.045,0.067,0.062,0.05,0.05,0.051,0.072,0.051,0.05,0.062,0.05,0.05,0.051,0.061,0.065,0.048,0.048,0.057,0.065,0.061,0.057,0.06,0.055,0.075,0.044,0.056,0.059,0.064,0.056,0.099,0.08,0.06,0.095,0.066,0.051,0.072,0.095,0.075,0.057,0.058,0.07,0.045,0.05,0.09,0.06,0.085,0.051,0.072,0.062,0.072,0.048,0.092,0.061,0.082,0.052,0.082,0.082,0.042,0.06,0.056,0.045,0.055,0.049,0.055,0.066,0.05,0.07,0.048,0.05,0.055,0.054,0.053,0.09,0.07,0.07,0.059,0.048,0.06,0.053,0.054,0.053,0.053,0.053,0.05,0.052,0.099,0.079,0.044,0.049,0.049,0.049,0.07,0.07,0.07,0.085,0.097,0.044,0.079,0.068,0.083,0.07,0.049,0.078,0.078,0.055,0.056,0.049,0.055,0.084,0.058,0.07,0.053,0.056,0.049,0.051,0.057,0.082,0.062,0.06,0.051,0.06,0.05,0.068,0.055,0.045,0.057,0.062,0.076,0.07,0.052,0.06,0.04,0.06,0.06,0.049,0.056,0.056,0.056,0.046,0.059,0.065,0.053,0.059,0.042,0.065,0.048,0.065,0.04,0.05,0.068,0.069,0.085,0.085,0.087,0.099,0.08,0.08,0.065,0.065,0.042,0.045,0.062,0.054,0.055,0.071,0.053,0.053,0.071,0.053,0.051,0.06,0.056,0.073,0.048,0.073,0.056,0.05,0.062,0.047,0.07,0.05,0.05,0.05,0.07,0.034,0.088,0.088,0.051,0.05,0.072,0.049,0.047,0.062,0.049,0.057,0.049,0.06,0.044,0.058,0.068,0.052,0.063,0.08,0.099,0.067,0.055,0.092,0.051,0.05,0.045,0.05,0.041,0.045,0.07,0.062,0.056,0.074,0.053,0.07,0.052,0.048,0.055,0.068,0.068,0.046,0.046,0.046,0.046,0.052,0.053,0.045,0.044,0.05,0.061,0.051,0.053,0.099,0.098,0.055,0.066,0.073,0.05,0.056,0.05,0.059,0.037,0.037,0.037,0.08,0.05,0.05,0.049,0.05,0.05,0.049,0.063,0.059,0.056,0.065,0.058,0.05,0.046,0.07,0.048,0.059,0.05,0.065,0.065,0.056,0.065,0.052,0.055,0.055,0.07,0.06,0.05,0.047,0.095,0.065,0.06,0.05,0.057,0.05,0.06,0.052,0.072,0.062,0.046,0.043,0.056,0.093,0.06,0.06,0.058,0.072,0.06,0.059,0.054,0.054,0.084,0.068,0.048,0.056,0.068,0.044,0.051,0.051,0.065,0.065,0.058,0.06,0.044,0.055,0.07,0.054,0.071,0.074,0.05,0.052,0.061,0.07,0.07,0.066,0.051,0.043,0.058,0.05,0.05,0.044,0.092,0.095,0.099,0.08,0.08,0.08,0.065,0.065,0.065,0.065,0.065,0.087,0.04,0.074,0.08,0.065,0.065,0.065,0.055,0.065,0.065,0.075,0.077,0.049,0.056,0.05,0.06,0.062,0.071,0.047,0.056,0.07,0.045,0.049,0.045,0.068,0.053,0.032,0.053,0.06,0.073,0.062,0.058,0.052,0.065,0.042,0.045,0.045,0.055,0.06,0.062,0.045,0.045,0.052,0.052,0.066,0.048,0.053,0.065],"type":"box","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>#Imputation by naive Bayes for classifying IBU
+#External cross-validation IBU as binned factors of values
+model &lt;- naiveBayes(IBU~., data=ibu_known)
+
+###multiple iterations
+iterations = 150
+masterAcc = matrix(nrow = iterations)
+
+for(j in 1:iterations){
+  train &lt;- ibu_known[sample(seq(1:length(ibu_known$IBU)),
+                                round(.7*length(ibu_known$IBU))),]
+  test &lt;- ibu_known[-sample(seq(1:length(ibu_known$IBU)),
+                                round(.7*length(ibu_known$IBU))),]
+
+  pred &lt;- predict(model, train)
+  t1 &lt;- table(factor(pred, union(pred, train$IBU)),
+              factor(train$IBU, union(pred, train$IBU)))
+  CM &lt;- confusionMatrix(t1)
+  masterAcc[j] = CM$overall[1]
+}
+colMeans(masterAcc) #average accuracy across the 150 iterations</code></pre>
+<pre><code>## [1] 0.8424686</code></pre>
+<pre class="r"><code>var(masterAcc) #measure of the variance across the 150 iterations</code></pre>
+<pre><code>##              [,1]
+## [1,] 4.833251e-05</code></pre>
+<pre class="r"><code>#Impute IBU&#39;s for unknowns (using nB model)
+imp &lt;- predict(model, ibu_unknown)
+ibu_unknown_nB &lt;- ibu_unknown
+
+for(i in 1:nrow(ibu_unknown_nB)){
+  ibu_unknown_nB$IBU[i] &lt;- imp[i]
+}
+combined_df_nB &lt;- rbind(ibu_known,ibu_unknown_nB)
+combined_df_nB &lt;- combined_df_nB[order(combined_df_nB$Brewery_id),]</code></pre>
+<p>The above code combines our imputed data into a single dataframe.</p>
+</div>
+<div id="question-4-what-is-the-median-alcohol-content-and-international-bitterness-unit-for-each-state" class="section level2">
+<h2>Question 4: What is the median alcohol content and international bitterness unit for each state?</h2>
+<pre class="r"><code>q4_df &lt;- combined_df_nB %&gt;% 
+  group_by(State) %&gt;% 
+  summarize(ABV=median(ABV, na.rm=T),
+            IBU=median(IBU, na.rm=T),
+            Region=Region)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;State&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>q4_df &lt;- q4_df[order(q4_df$ABV),] #reorder data
+
+#scaling factor
+sf &lt;- max(q4_df$IBU, na.rm=T)/max(q4_df$ABV, na.rm=T)
+
+#simultaneous visualization of ABV &amp; IBU across states by region
+q4_df %&gt;% mutate(ABV=ABV*sf) %&gt;%
+  pivot_longer(names_to=&#39;y_new&#39;, values_to=&#39;val&#39;, ABV:IBU) %&gt;%
+  ggplot(aes(x=State)) +
+  geom_bar(aes(y=val, fill=y_new, group=y_new),
+           stat=&#39;identity&#39;, position=position_dodge()) +
+  scale_y_continuous(name=&quot;IBU&quot;, labels=scales::comma,
+                     sec.axis=sec_axis(~./sf, name=&quot;ABV&quot;,
+                                       labels=scales::comma)) +
+  facet_wrap(~Region, scale=&#39;free&#39;) +
+  ggtitle(&quot;Median ABV &amp; IBU by State&quot;) +
+  theme(legend.position=&quot;bottom&quot;,
+        #guide_legend(title=NULL),
+        axis.text.x=element_text(angle=45,hjust=0.8)) +
+  labs(fill=NULL)</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-4-1.png" width="672" /></p>
+<p>Of particular note is that New Mexico has the highest median IBU at 88 units.</p>
+</div>
+<div id="question-5-which-state-has-the-maximum-alcoholic-abv-beer-which-state-has-the-most-bitter-ibu-beer" class="section level2">
+<h2>Question 5: Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?</h2>
+<pre class="r"><code>#finding the state with max ABV
+q5_ABV &lt;- combined_df_nB[which.max(combined_df_nB$ABV),10]
+#finding the state with max IBU
+q5_IBU &lt;- combined_df_nB[which.max(combined_df_nB$IBU),10]</code></pre>
+<p>The state with the ABV is Colorado with a value of 0.128. And the state with the highest IBU is Oregon with an ABV of 138. Neither of these values came from the imputed data (i.e. they were not previously NA values).</p>
+</div>
+<div id="question-6-what-are-the-main-statistics-and-distributions-of-the-abv-variable" class="section level2">
+<h2>Question 6: What are the main statistics and distributions of the ABV variable?</h2>
+<pre class="r"><code>combined_df_nB %&gt;% 
+  summarise(minABV = min(ABV),
+            q1ABV = quantile(x=ABV, probs=0.25),
+            medianABV = median(ABV),
+            q3ABV = quantile(x=ABV, probs=0.75),
+            maxABV = max(ABV),
+            meanABV = mean(ABV),
+            sdABV = sd(ABV),
+            )</code></pre>
+<pre><code>##   minABV q1ABV medianABV q3ABV maxABV    meanABV
+## 1      0  0.05     0.056 0.067  0.128 0.05823568
+##        sdABV
+## 1 0.01637826</code></pre>
+<pre class="r"><code>zeros &lt;- sum(ifelse(combined_df_nB$ABV==0,1,0))
+
+combined_df_nB %&gt;% 
+  mutate(ImputedZero=ifelse(ABV==0,1,0)) %&gt;%
+  ggplot(aes(x=ABV, fill=ImputedZero)) +
+  geom_histogram(stat=&quot;count&quot;, color=&quot;black&quot;, fill=&quot;goldenrod&quot;)</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-6-1.png" width="672" /></p>
+<pre class="r"><code>#violin plot
+combined_df_nB_2 = combined_df_nB
+combined_df_nB_2$hold = 1
+head(combined_df_nB_2)</code></pre>
+<pre><code>##   Brewery_id        Name.x Beer_ID   ABV IBU
+## 1          1  Get Together    2692 0.045  50
+## 2          1 Maggie&#39;s Leap    2691 0.049  26
+## 3          1    Wall&#39;s End    2690 0.048  19
+## 4          1       Pumpion    2689 0.060  38
+## 5          1    Stronghold    2688 0.060  25
+## 6          1   Parapet ESB    2687 0.056  47
+##                                 Style Ounces
+## 1                        American IPA     16
+## 2                  Milk / Sweet Stout     16
+## 3                   English Brown Ale     16
+## 4                         Pumpkin Ale     16
+## 5                     American Porter     16
+## 6 Extra Special / Strong Bitter (ESB)     16
+##               Name.y        City State
+## 1 NorthGate Brewing  Minneapolis    MN
+## 2 NorthGate Brewing  Minneapolis    MN
+## 3 NorthGate Brewing  Minneapolis    MN
+## 4 NorthGate Brewing  Minneapolis    MN
+## 5 NorthGate Brewing  Minneapolis    MN
+## 6 NorthGate Brewing  Minneapolis    MN
+##          Region hold
+## 1 North Central    1
+## 2 North Central    1
+## 3 North Central    1
+## 4 North Central    1
+## 5 North Central    1
+## 6 North Central    1</code></pre>
+<pre class="r"><code>combined_df_nB_2 %&gt;%
+  ggplot(aes(x = hold, y = ABV)) +
+  geom_violin(fill = &quot;blue&quot;) + 
+  xlab(&quot;All Beers ABV Distribution&quot;) +
+  ylab(&quot;Distribution of ABVs&quot;) +
+  scale_x_discrete(labels = NULL)</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-6-2.png" width="672" /></p>
+<p>The ABV variable had 62 imputed 0’s. The error rate for this is 2.5726141%.</p>
+</div>
+<div id="question-7-is-there-an-apparent-relationship-between-the-bitterness-of-the-beer-and-its-alcoholic-content" class="section level2">
+<h2>Question 7: Is there an apparent relationship between the bitterness of the beer and its alcoholic content?</h2>
+<pre class="r"><code>combined_df_nB %&gt;%
+  ggplot(aes(x=ABV, y=IBU)) +
+  geom_point() +
+  labs(title=&quot;ABV and IBU comparison&quot;) +
+  geom_smooth(method=&quot;lm&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-7-1.png" width="672" /></p>
+<p>We can see that there is a positive correlation between IBU and ABV. We can see a big cluster around 5% ABV, and we predict that these are regular 12 ounces of beers which, according to NIAAA in the U.S., contain between 4-7% ABV, with the average being 5%. Anything above estimates to be malt liquor which averages to be 7% ABV. Just based on this we couldn’t determine the causation, so we decided to compare by Ale and IPAs. We can see that the majority of Ales have low ABV and IBU while the majority of IPAs have high ABV and IBU. Budweiser has average 5% ABV and 7 IBU; therefore, we may carefully suggest focusing on products with ABVs within range of 5.6 to 5.8% and IBUs of 19 to 64. This range might be more competitive in the existing market.</p>
+</div>
+<div id="question-8-what-are-the-difference-with-respect-to-ibu-and-abv-between-india-pale-ales-and-other-types-of-ale-any-beer-with-ale-in-its-name-other-than-ipa" class="section level2">
+<h2>Question 8: What are the difference with respect to IBU and ABV between (India Pale Ales) and other types of Ale (any beer with “Ale” in its name other than IPA)?</h2>
+<pre class="r"><code>sum(grepl(&quot;IPA&quot;,combined_df_nB$Style)) #total IPAs</code></pre>
+<pre><code>## [1] 571</code></pre>
+<pre class="r"><code>#check for &#39;India Pale Ale&#39; instead of &#39;IPA&#39;
+sum(grepl(&quot;India Pale Ale&quot;,combined_df_nB$Style)) -
+  sum(grepl(&quot;India Pale Ale&quot;,combined_df_nB$Style)&amp;grepl(&quot;IPA&quot;,combined_df_nB$Style))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>#isolate all IPA ales
+q8_ipa &lt;- combined_df_nB %&gt;%
+  filter(grepl(&quot;IPA&quot;,combined_df_nB$Style)) %&gt;%
+  mutate(Style=&quot;IPA&quot;)
+#isolate all non-IPA ales
+q8_otherAle &lt;- combined_df_nB %&gt;%
+  filter(grepl(&quot;Ale&quot;,combined_df_nB$Style) &amp;
+           !grepl(&quot;IPA&quot;,combined_df_nB$Style)) %&gt;%
+  mutate(Style=&quot;non-IPA Ale&quot;)
+#recombine
+q8_df &lt;- rbind(q8_ipa,q8_otherAle)
+
+q8_df %&gt;%
+  ggplot(aes(x=ABV, y=IBU, color=Style)) +
+  geom_point() +
+  labs(title=&quot;ABV and IBU comparison\nby Ale-type&quot;) +
+  geom_smooth(aes(color=Style))</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-8-1.png" width="672" /></p>
+<pre class="r"><code>q8_df &lt;- q8_df %&gt;% mutate(Style_Num=ifelse(Style==&quot;IPA&quot;,1,0))
+
+#run knn iterations to evaluate optimal k-value
+set.seed(7)
+splitPerc = 0.7
+iterations = 100
+nums = 100
+masterAcc2 = matrix(nrow = iterations, ncol = nums)
+
+for (j in 1:iterations){
+  accs = data.frame(accuracy = numeric(100), k=numeric(100))
+  trainIndices2 = sample(1:dim(q8_df)[1],round(splitPerc*dim(q8_df)[1]))
+  train2 = q8_df[trainIndices2,]
+  test2 = q8_df[-trainIndices2,]
+  for (i in 1:nums)  {
+    classifications = knn(train2[,c(4,5)],test2[,c(4,5)],as.factor(train2$Style),prob=TRUE,k=i)
+    CM2 = confusionMatrix(table(as.factor(test2$Style),classifications))
+    masterAcc2[j,i] = CM2$overall[1]
+  }
+}
+
+CM2</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##              classifications
+##               IPA non-IPA Ale
+##   IPA         136          34
+##   non-IPA Ale  53         237
+##                                          
+##                Accuracy : 0.8109         
+##                  95% CI : (0.772, 0.8456)
+##     No Information Rate : 0.5891         
+##     P-Value [Acc &gt; NIR] : &lt; 2e-16        
+##                                          
+##                   Kappa : 0.6033         
+##                                          
+##  Mcnemar&#39;s Test P-Value : 0.05363        
+##                                          
+##             Sensitivity : 0.7196         
+##             Specificity : 0.8745         
+##          Pos Pred Value : 0.8000         
+##          Neg Pred Value : 0.8172         
+##              Prevalence : 0.4109         
+##          Detection Rate : 0.2957         
+##    Detection Prevalence : 0.3696         
+##       Balanced Accuracy : 0.7971         
+##                                          
+##        &#39;Positive&#39; Class : IPA            
+## </code></pre>
+<pre class="r"><code>meanAcc2=colMeans(masterAcc2)
+
+#add titles / labels for axis 
+{plot(seq(1,nums,1),meanAcc2,type=&quot;l&quot;)
+abline(v=which.max(meanAcc2),col=&quot;red&quot;,lwd=1)
+abline(h=max(meanAcc2),col=&quot;red&quot;,lwd=1)}</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-8-2.png" width="672" /></p>
+<pre class="r"><code>which.max(meanAcc2)</code></pre>
+<pre><code>## [1] 37</code></pre>
+<pre class="r"><code>max(meanAcc2)</code></pre>
+<pre><code>## [1] 0.8187391</code></pre>
+<pre class="r"><code>#internal cross-validation using optimal k
+CM3 &lt;- confusionMatrix(
+  table(knn.cv(q8_df[,c(4,5)],
+             q8_df$Style, k=37,prob=T),
+      q8_df$Style)
+)
+CM3 #print out the confusion matrix</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##              
+##               IPA non-IPA Ale
+##   IPA         431         141
+##   non-IPA Ale 140         822
+##                                           
+##                Accuracy : 0.8168          
+##                  95% CI : (0.7965, 0.8359)
+##     No Information Rate : 0.6278          
+##     P-Value [Acc &gt; NIR] : &lt;2e-16          
+##                                           
+##                   Kappa : 0.6082          
+##                                           
+##  Mcnemar&#39;s Test P-Value : 1               
+##                                           
+##             Sensitivity : 0.7548          
+##             Specificity : 0.8536          
+##          Pos Pred Value : 0.7535          
+##          Neg Pred Value : 0.8545          
+##              Prevalence : 0.3722          
+##          Detection Rate : 0.2810          
+##    Detection Prevalence : 0.3729          
+##       Balanced Accuracy : 0.8042          
+##                                           
+##        &#39;Positive&#39; Class : IPA             
+## </code></pre>
+<p>We decided to use KNN classification for our approach. From external cross-validations, the optimal number of nearest neighbors is 37. From this, we checked our accuracy, sensitivity, and specificity of predicting IPA versus non-IPA ales. The accuracy for predicting IPA with internal cross-validation based on ABV and IBU was found to be 83.83%, the specificity was 80.95%, and the sensitivity was 75.86%.</p>
+</div>
+<div id="some-other-exploratory-findings-based-on-the-provided-data-are" class="section level2">
+<h2>Some other exploratory findings based on the provided data are:</h2>
+<pre class="r"><code>head(table(combined_df_nB$Style)) #checking list of styles</code></pre>
+<pre><code>## 
+##                            
+##                          5 
+##           Abbey Single Ale 
+##                          2 
+##                    Altbier 
+##                         13 
+##     American Adjunct Lager 
+##                         18 
+##   American Amber / Red Ale 
+##                        133 
+## American Amber / Red Lager 
+##                         29</code></pre>
+<pre class="r"><code>sum(ifelse(combined_df_nB$Style==&quot;&quot;,1,0)) #finding the unidentified styles</code></pre>
+<pre><code>## [1] 5</code></pre>
+<pre class="r"><code>style_byState &lt;- combined_df_nB %&gt;% select(Style, ABV, IBU, State, Region)
+
+#replacing empty strings with &#39;unknown&#39;
+style_byState$Style &lt;- replace(style_byState$Style,
+                               which(style_byState==&quot;&quot;),
+                               &quot;Unknown&quot;)
+table(style_byState$Style) #checking update</code></pre>
+<pre><code>## 
+##                    Abbey Single Ale 
+##                                   2 
+##                             Altbier 
+##                                  13 
+##              American Adjunct Lager 
+##                                  18 
+##            American Amber / Red Ale 
+##                                 133 
+##          American Amber / Red Lager 
+##                                  29 
+##                 American Barleywine 
+##                                   3 
+##                  American Black Ale 
+##                                  36 
+##                 American Blonde Ale 
+##                                 108 
+##                  American Brown Ale 
+##                                  70 
+##             American Dark Wheat Ale 
+##                                   7 
+##      American Double / Imperial IPA 
+##                                 105 
+##  American Double / Imperial Pilsner 
+##                                   2 
+##    American Double / Imperial Stout 
+##                                   9 
+##           American India Pale Lager 
+##                                   3 
+##                        American IPA 
+##                                 424 
+##                American Malt Liquor 
+##                                   1 
+##             American Pale Ale (APA) 
+##                                 245 
+##                 American Pale Lager 
+##                                  39 
+##             American Pale Wheat Ale 
+##                                  97 
+##                    American Pilsner 
+##                                  25 
+##                     American Porter 
+##                                  68 
+##                      American Stout 
+##                                  39 
+##                 American Strong Ale 
+##                                  14 
+##                  American White IPA 
+##                                  11 
+##                   American Wild Ale 
+##                                   6 
+##                       Baltic Porter 
+##                                   6 
+##                    Belgian Dark Ale 
+##                                  11 
+##                         Belgian IPA 
+##                                  18 
+##                    Belgian Pale Ale 
+##                                  24 
+##             Belgian Strong Dark Ale 
+##                                   6 
+##             Belgian Strong Pale Ale 
+##                                   7 
+##                  Berliner Weissbier 
+##                                  11 
+##                     BiÃ¨re de Garde 
+##                                   7 
+##                                Bock 
+##                                   7 
+##                             Braggot 
+##                                   1 
+##      California Common / Steam Beer 
+##                                   6 
+##                          Chile Beer 
+##                                   3 
+##                               Cider 
+##                                  37 
+##                           Cream Ale 
+##                                  29 
+##                      Czech Pilsener 
+##                                  28 
+##                          Doppelbock 
+##                                   7 
+##           Dortmunder / Export Lager 
+##                                   6 
+##                              Dubbel 
+##                                   5 
+##                        Dunkelweizen 
+##                                   4 
+##                  English Barleywine 
+##                                   3 
+##                      English Bitter 
+##                                   3 
+##                   English Brown Ale 
+##                                  18 
+##               English Dark Mild Ale 
+##                                   6 
+##        English India Pale Ale (IPA) 
+##                                  13 
+##                    English Pale Ale 
+##                                  12 
+##               English Pale Mild Ale 
+##                                   3 
+##                       English Stout 
+##                                   2 
+##                  English Strong Ale 
+##                                   4 
+##                     Euro Dark Lager 
+##                                   5 
+##                     Euro Pale Lager 
+##                                   2 
+## Extra Special / Strong Bitter (ESB) 
+##                                  20 
+##                  Flanders Oud Bruin 
+##                                   1 
+##                    Flanders Red Ale 
+##                                   1 
+##              Foreign / Export Stout 
+##                                   6 
+##              Fruit / Vegetable Beer 
+##                                  49 
+##                     German Pilsener 
+##                                  36 
+##                                Gose 
+##                                  10 
+##                            Grisette 
+##                                   1 
+##                          Hefeweizen 
+##                                  40 
+##                Herbed / Spiced Beer 
+##                                   9 
+##                     Irish Dry Stout 
+##                                   5 
+##                       Irish Red Ale 
+##                                  12 
+##                             KÃ¶lsch 
+##                                  42 
+##          Keller Bier / Zwickel Bier 
+##                                   3 
+##                       Kristalweizen 
+##                                   1 
+##                         Light Lager 
+##                                  12 
+##                    Low Alcohol Beer 
+##                                   1 
+##               MÃ¤rzen / Oktoberfest 
+##                                  30 
+##               Maibock / Helles Bock 
+##                                   5 
+##                                Mead 
+##                                   5 
+##                  Milk / Sweet Stout 
+##                                  10 
+##                 Munich Dunkel Lager 
+##                                   4 
+##                 Munich Helles Lager 
+##                                  20 
+##                       Oatmeal Stout 
+##                                  18 
+##                             Old Ale 
+##                                   2 
+##                               Other 
+##                                   1 
+##                         Pumpkin Ale 
+##                                  23 
+##                    Quadrupel (Quad) 
+##                                   4 
+##                              Radler 
+##                                   3 
+##                           Rauchbier 
+##                                   2 
+##                          Roggenbier 
+##                                   2 
+##              Russian Imperial Stout 
+##                                  11 
+##                            Rye Beer 
+##                                  18 
+##              Saison / Farmhouse Ale 
+##                                  52 
+##                         Schwarzbier 
+##                                   9 
+##              Scotch Ale / Wee Heavy 
+##                                  15 
+##                        Scottish Ale 
+##                                  19 
+##                              Shandy 
+##                                   3 
+##                         Smoked Beer 
+##                                   1 
+##                              Tripel 
+##                                  11 
+##                             Unknown 
+##                                   5 
+##                        Vienna Lager 
+##                                  20 
+##                           Wheat Ale 
+##                                   1 
+##                       Winter Warmer 
+##                                  15 
+##                             Witbier 
+##                                  51</code></pre>
+<pre class="r"><code>#creating the dataframe for State-preferences
+style_byState %&gt;% group_by(State) %&gt;%
+  summarize(Style = names(which.max(table(Style))),
+            ABV = mean(ABV), #could switch to median if needed
+            IBU = mean(IBU))</code></pre>
+<pre><code>## # A tibble: 51 x 4
+##    State Style                       ABV   IBU
+##    &lt;chr&gt; &lt;chr&gt;                     &lt;dbl&gt; &lt;dbl&gt;
+##  1 AK    American IPA             0.0556  34.4
+##  2 AL    American IPA             0.062   50.1
+##  3 AR    American Amber / Red Ale 0.052   25  
+##  4 AZ    American IPA             0.0564  37.8
+##  5 CA    American IPA             0.0607  44.8
+##  6 CO    American IPA             0.0598  47.0
+##  7 CT    American Amber / Red Ale 0.0611  42.0
+##  8 DC    American Blonde Ale      0.0656  54.9
+##  9 DE    American IPA             0.0275  50.5
+## 10 FL    American IPA             0.0579  41.4
+## # ... with 41 more rows</code></pre>
+<pre class="r"><code>#creating the summary for grpahing
+summary_byState &lt;- style_byState %&gt;%
+  group_by(State) %&gt;%
+  summarize(Style = names(which.max(table(Style))),
+            ABV = median(ABV),
+            IBU = median(IBU))
+summary_byState &lt;- summary_byState %&gt;% dplyr::rename(state=State)
+
+beer_colors &lt;- c(&quot;#FFCCFF&quot;, &quot;#CC6633&quot;, &quot;#993300&quot;,
+                 &quot;#330000&quot;, &quot;#FFCC66&quot;, &quot;#663300&quot;,
+                 &quot;#006699&quot;, &quot;#3399FF&quot;, &quot;#99CCFF&quot;,
+                 &quot;#660066&quot;, &quot;#66FF00&quot;, &quot;#006600&quot;)
+
+plot_usmap(regions=&quot;states&quot;,
+           data=summary_byState,
+           values=&quot;Style&quot;,labels=F,offset=0.5, color=&quot;white&quot;) +
+  theme(legend.position=&quot;bottom&quot;,
+        legend.title=element_blank()) +
+  labs(title = &quot;Preferred Beer Style\nby State&quot;) +
+  scale_fill_manual(values=beer_colors)</code></pre>
+<p><img src="casestudy1_files/figure-html/Question-9-1.png" width="672" /></p>
+<p>Above, we can see a depiction of majority preference by state for certain styles of beers. When ties occurred, we gave the win to the most prevalent beer-type nationally. The focus of our analysis here was to present a by-state retail option. With additional supply-chain information, we may be able to help optimize future distribution or optimization efforts.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

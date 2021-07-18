@@ -1,0 +1,18 @@
+---
+title: "Home"
+author: "Will Sherman"
+date: "7/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The following pages represent a compendium of my coursework through the Masters of Data Science program at Southern Methodist University.
+
+### About Me: 
+Page about my personal interests, education, background
+
+### Case Studies:
+Pages about the projects I've worked on individually or in groups as part of the Data Science program.

@@ -1,0 +1,375 @@
+---
+title: "Beers Case Study"
+author: 
+  - Will Sherman
+  - Kati Scheurger
+  - Randy Kim
+date: "7/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Hello to everyone—the board and directors of Budweiser for this particular study. The following analysis includes my team's exploratory data analysis (EDA) and our key findings related to your questions on the Beers and Breweries data sets. The primary focus of this EDA was the relationship between alcohol by volume (ABV), international bitterness units (IBU), and classification of ales as either IPA or some other type of Ale.
+
+```{r, warning=F, message=F, error=F, results='hide'}
+# The necessary libraries for this EDA
+require(ggplot2)
+require(dplyr)
+require(maps)
+require(e1071)
+require(caret)
+require(class)
+require(stringr)
+require(tidyr)
+require(highcharter)
+require(usmap)
+require(plotly)
+require(kable)
+require(kableExtra)
+```
+
+```{r Load-Data, warning=F}
+beers <- read.csv("~/Grad School - Classes/MSDS - 6306 - Doing Data Science/MSDS_6306_DDS_Git/Unit 8 and 9 Case Study 1/Beers.csv")
+breweries <- read.csv("~/Grad School - Classes/MSDS - 6306 - Doing Data Science/MSDS_6306_DDS_Git/Unit 8 and 9 Case Study 1/Breweries.csv")
+
+beers_df <- beers[order(beers$Brewery_id),]
+```
+
+## Question 1: How many breweries are present in each state?
+```{r Question-1, warning=F}
+#initial plot
+breweries %>% ggplot(aes(x=State)) +
+  geom_histogram(stat="count") +
+  labs(title="Count of breweries per state") +
+  theme(axis.text.x=element_text(angle=45,hjust=0.8))
+
+#setting up df to append region to breweries
+st_reg <- data.frame(State=state.abb, Region=state.region)
+st_reg <- rbind(st_reg, data.frame(State="DC", Region="Northeast"))
+st_reg$Region <- as.character(st_reg$Region)
+
+breweries_df <- breweries[order(breweries$State),]
+breweries_df$State <- stringr::str_trim(breweries_df$State) #trim whitespace
+
+#append region to breweries  
+breweries_df <- left_join(breweries_df, st_reg)
+
+#plot breweries by state & region
+breweries_df %>% ggplot(aes(x=State)) +
+  geom_histogram(stat="count") +
+  labs(title="Count of breweries per state\nsorted by region") +
+  theme(axis.text.x=element_text(angle=45,hjust=0.8)) +
+  facet_wrap(~Region, scale="free")
+#creating df for table analysis
+b_tabledata <- breweries_df %>%
+  group_by(State) %>%
+  summarise(Breweries=n()) %>%
+  left_join(st_reg)
+#re-order data
+b_tabledata <- b_tabledata[order(b_tabledata$Breweries, decreasing=T),]
+  
+t1 <- b_tabledata[which(b_tabledata$Region=="North Central"),c(1,2)]
+t2 <- b_tabledata[which(b_tabledata$Region=="Northeast"),c(1,2)]
+t3 <- b_tabledata[which(b_tabledata$Region=="South"),c(1,2)]
+t4 <- b_tabledata[which(b_tabledata$Region=="West"),c(1,2)]
+
+kable(list(t1,t2,t3,t4),
+      booktabs=T,
+      align=c("c","c"),
+      col.names=c("State","&nbsp;&nbsp;&nbsp;Breweries"),
+      escape=F) %>%
+  kable_styling(full_width=F,
+                position="left",
+                bootstrap_options = "bordered") %>%
+  add_header_above(c("North Central"=1,"Northeast"=1,"South"=1,"West"=1),align="l") %>%
+  add_header_above(c("Brewery count by state\nsorted by region"=4),bold=T)
+```
+The above graph & table show the number of breweries per state (both are broken down by region for more compact reading).
+
+```{r Question-2}
+# Merge the data
+combined <- merge(beers_df, breweries_df, by.x="Brewery_id", by.y="Brew_ID")
+#head of the merged dataframe
+head(combined,6)
+#tail of the merged dataframe
+tail(combined,6)
+```
+Here are the initial views (beginning and end) of the combined dataframe.
+
+```{r Question-3, warning=F}
+#adding in a df of missing IBU values per state
+na_byState <- data.frame()
+for(i in st_reg$State){
+  na_byState[i,1]=length(which(grepl(i,combined$State)))
+  na_byState[i,2]=length(which(grepl(i,combined$State) & is.na(combined$IBU)))
+}
+names(na_byState) <- c("Beers_count","IBU_NAs_count")
+na_byState %>% mutate(Percent_NA = round(IBU_NAs_count/Beers_count*100,digits=0))
+
+sum(is.na(combined)) #number of total NA's (equal to NA's in IBU & ABV)
+sum(is.na(combined$IBU)) #number of NA's in IBU
+sum(is.na(combined$ABV)) #number of NA's in ABV
+
+combined_df <- combined #create working df
+
+###set seed
+set.seed(7)
+
+#Generalized Imputation on Mean for ABV
+#calculated mean for all non-missing values & replaced NA's with mean.
+combined_df$ABV <- ifelse(is.na(combined_df$ABV),
+                       round(sample((mean(combined_df$ABV, na.rm=T) - sd(combined_df$ABV, na.rm=T)):
+                                      (mean(combined_df$ABV, na.rm=T) + sd(combined_df$ABV, na.rm=T)),
+                             size=sum(is.na(combined_df$ABV)), replace=T), 0), combined_df$ABV)
+
+#Subset known IBU's for train/test
+ibu_known <- combined_df[which(!is.na(combined_df$IBU)),]
+ibu_unknown <- combined_df[which(is.na(combined_df$IBU)),]
+
+#correlation between numerical vectors - weak association
+ibu_known %>% select_if(is.numeric) %>% cor() %>% corrplot::corrplot()
+
+#visualizing strongest relationship between IBU and categorical values
+plot_ly(ibu_known, x= ~reorder(Style,IBU), y= ~IBU) %>%
+  add_boxplot() %>%
+  layout(title="IBU by Beer Style")
+#visual comparison with ABV and Style (same order as IBU-relationship)
+plot_ly(ibu_known, x= ~reorder(Style,IBU), y= ~ABV) %>%
+  add_boxplot() %>%
+  layout(title="ABV by Beer Style\nordered by increasing IBU")
+
+#Imputation by naive Bayes for classifying IBU
+#External cross-validation IBU as binned factors of values
+model <- naiveBayes(IBU~., data=ibu_known)
+
+###multiple iterations
+iterations = 150
+masterAcc = matrix(nrow = iterations)
+
+for(j in 1:iterations){
+  train <- ibu_known[sample(seq(1:length(ibu_known$IBU)),
+                                round(.7*length(ibu_known$IBU))),]
+  test <- ibu_known[-sample(seq(1:length(ibu_known$IBU)),
+                                round(.7*length(ibu_known$IBU))),]
+
+  pred <- predict(model, train)
+  t1 <- table(factor(pred, union(pred, train$IBU)),
+              factor(train$IBU, union(pred, train$IBU)))
+  CM <- confusionMatrix(t1)
+  masterAcc[j] = CM$overall[1]
+}
+colMeans(masterAcc) #average accuracy across the 150 iterations
+var(masterAcc) #measure of the variance across the 150 iterations
+
+#Impute IBU's for unknowns (using nB model)
+imp <- predict(model, ibu_unknown)
+ibu_unknown_nB <- ibu_unknown
+
+for(i in 1:nrow(ibu_unknown_nB)){
+  ibu_unknown_nB$IBU[i] <- imp[i]
+}
+combined_df_nB <- rbind(ibu_known,ibu_unknown_nB)
+combined_df_nB <- combined_df_nB[order(combined_df_nB$Brewery_id),]
+```
+The above code combines our imputed data into a single dataframe.
+
+
+## Question 4: What is the median alcohol content and international bitterness unit for each state?
+```{r Question-4, warning=F}
+q4_df <- combined_df_nB %>% 
+  group_by(State) %>% 
+  summarize(ABV=median(ABV, na.rm=T),
+            IBU=median(IBU, na.rm=T),
+            Region=Region)
+q4_df <- q4_df[order(q4_df$ABV),] #reorder data
+
+#scaling factor
+sf <- max(q4_df$IBU, na.rm=T)/max(q4_df$ABV, na.rm=T)
+
+#simultaneous visualization of ABV & IBU across states by region
+q4_df %>% mutate(ABV=ABV*sf) %>%
+  pivot_longer(names_to='y_new', values_to='val', ABV:IBU) %>%
+  ggplot(aes(x=State)) +
+  geom_bar(aes(y=val, fill=y_new, group=y_new),
+           stat='identity', position=position_dodge()) +
+  scale_y_continuous(name="IBU", labels=scales::comma,
+                     sec.axis=sec_axis(~./sf, name="ABV",
+                                       labels=scales::comma)) +
+  facet_wrap(~Region, scale='free') +
+  ggtitle("Median ABV & IBU by State") +
+  theme(legend.position="bottom",
+        #guide_legend(title=NULL),
+        axis.text.x=element_text(angle=45,hjust=0.8)) +
+  labs(fill=NULL)
+```
+
+Of particular note is that New Mexico has the highest median IBU at `r median(combined_df_nB[which(combined_df_nB$State=="NM"),5])` units.
+
+## Question 5: Which state has the maximum alcoholic (ABV) beer? Which state has the most bitter (IBU) beer?
+```{r Question-5}
+#finding the state with max ABV
+q5_ABV <- combined_df_nB[which.max(combined_df_nB$ABV),10]
+#finding the state with max IBU
+q5_IBU <- combined_df_nB[which.max(combined_df_nB$IBU),10]
+```
+The state with the ABV is Colorado with a value of `r max(combined_df_nB$ABV)`. And the state with the highest IBU is Oregon with an ABV of `r max(combined_df_nB$IBU)`. Neither of these values came from the imputed data (i.e. they were not previously NA values).
+
+## Question 6: What are the main statistics and distributions of the ABV variable?
+```{r Question-6, warning=F}
+combined_df_nB %>% 
+  summarise(minABV = min(ABV),
+            q1ABV = quantile(x=ABV, probs=0.25),
+            medianABV = median(ABV),
+            q3ABV = quantile(x=ABV, probs=0.75),
+            maxABV = max(ABV),
+            meanABV = mean(ABV),
+            sdABV = sd(ABV),
+            )
+
+zeros <- sum(ifelse(combined_df_nB$ABV==0,1,0))
+
+combined_df_nB %>% 
+  mutate(ImputedZero=ifelse(ABV==0,1,0)) %>%
+  ggplot(aes(x=ABV, fill=ImputedZero)) +
+  geom_histogram(stat="count", color="black", fill="goldenrod")
+
+#violin plot
+combined_df_nB_2 = combined_df_nB
+combined_df_nB_2$hold = 1
+head(combined_df_nB_2)
+
+combined_df_nB_2 %>%
+  ggplot(aes(x = hold, y = ABV)) +
+  geom_violin(fill = "blue") + 
+  xlab("All Beers ABV Distribution") +
+  ylab("Distribution of ABVs") +
+  scale_x_discrete(labels = NULL)
+```
+
+The ABV variable had `r zeros` imputed 0's. The error rate for this is `r zeros/length(combined_df_nB$ABV)*100`%.
+
+## Question 7: Is there an apparent relationship between the bitterness of the beer and its alcoholic content?
+```{r Question-7}
+combined_df_nB %>%
+  ggplot(aes(x=ABV, y=IBU)) +
+  geom_point() +
+  labs(title="ABV and IBU comparison") +
+  geom_smooth(method="lm")
+```
+
+We can see that there is a positive correlation between IBU and ABV. We can see a big cluster around 5% ABV, and we predict that these are regular 12 ounces of beers which, according to NIAAA in the U.S., contain between 4-7% ABV, with the average being 5%. Anything above estimates to be malt liquor which averages to be 7% ABV.
+Just based on this we couldn’t determine the causation, so we decided to compare by Ale and IPAs. We can see that the majority of Ales have low ABV and IBU while the majority of IPAs have high ABV and IBU. Budweiser has average 5% ABV and 7 IBU; therefore, we may carefully suggest focusing on products with ABVs within range of 5.6 to 5.8% and IBUs of 19 to 64. This range might be more competitive in the existing market. 
+
+## Question 8: What are the difference with respect to IBU and ABV between (India Pale Ales) and other types of Ale (any beer with “Ale” in its name other than IPA)?  
+```{r Question-8, warning=F}
+sum(grepl("IPA",combined_df_nB$Style)) #total IPAs
+
+#check for 'India Pale Ale' instead of 'IPA'
+sum(grepl("India Pale Ale",combined_df_nB$Style)) -
+  sum(grepl("India Pale Ale",combined_df_nB$Style)&grepl("IPA",combined_df_nB$Style))
+
+#isolate all IPA ales
+q8_ipa <- combined_df_nB %>%
+  filter(grepl("IPA",combined_df_nB$Style)) %>%
+  mutate(Style="IPA")
+#isolate all non-IPA ales
+q8_otherAle <- combined_df_nB %>%
+  filter(grepl("Ale",combined_df_nB$Style) &
+           !grepl("IPA",combined_df_nB$Style)) %>%
+  mutate(Style="non-IPA Ale")
+#recombine
+q8_df <- rbind(q8_ipa,q8_otherAle)
+
+q8_df %>%
+  ggplot(aes(x=ABV, y=IBU, color=Style)) +
+  geom_point() +
+  labs(title="ABV and IBU comparison\nby Ale-type") +
+  geom_smooth(aes(color=Style))
+
+q8_df <- q8_df %>% mutate(Style_Num=ifelse(Style=="IPA",1,0))
+
+#run knn iterations to evaluate optimal k-value
+set.seed(7)
+splitPerc = 0.7
+iterations = 100
+nums = 100
+masterAcc2 = matrix(nrow = iterations, ncol = nums)
+
+for (j in 1:iterations){
+  accs = data.frame(accuracy = numeric(100), k=numeric(100))
+  trainIndices2 = sample(1:dim(q8_df)[1],round(splitPerc*dim(q8_df)[1]))
+  train2 = q8_df[trainIndices2,]
+  test2 = q8_df[-trainIndices2,]
+  for (i in 1:nums)  {
+    classifications = knn(train2[,c(4,5)],test2[,c(4,5)],as.factor(train2$Style),prob=TRUE,k=i)
+    CM2 = confusionMatrix(table(as.factor(test2$Style),classifications))
+    masterAcc2[j,i] = CM2$overall[1]
+  }
+}
+
+CM2
+meanAcc2=colMeans(masterAcc2)
+
+#add titles / labels for axis 
+{plot(seq(1,nums,1),meanAcc2,type="l")
+abline(v=which.max(meanAcc2),col="red",lwd=1)
+abline(h=max(meanAcc2),col="red",lwd=1)}
+
+which.max(meanAcc2)
+max(meanAcc2)
+#internal cross-validation using optimal k
+CM3 <- confusionMatrix(
+  table(knn.cv(q8_df[,c(4,5)],
+             q8_df$Style, k=37,prob=T),
+      q8_df$Style)
+)
+CM3 #print out the confusion matrix
+```
+
+We decided to use KNN classification for our approach. From external cross-validations, the optimal number of nearest neighbors is `r which.max(meanAcc2)`. From this, we checked our accuracy, sensitivity, and specificity of predicting IPA versus non-IPA ales. The accuracy for predicting IPA with internal cross-validation based on ABV and IBU was found to be `r round(CM$overall[[1]],4)*100`%, the specificity was `r round(CM$byClass[[2]],4)*100`%, and the sensitivity was `r round(CM$byClass[[1]],4)*100`%.
+
+## Some other exploratory findings based on the provided data are:
+```{r Question-9, warning=F}
+head(table(combined_df_nB$Style)) #checking list of styles
+sum(ifelse(combined_df_nB$Style=="",1,0)) #finding the unidentified styles
+
+style_byState <- combined_df_nB %>% select(Style, ABV, IBU, State, Region)
+
+#replacing empty strings with 'unknown'
+style_byState$Style <- replace(style_byState$Style,
+                               which(style_byState==""),
+                               "Unknown")
+table(style_byState$Style) #checking update
+
+#creating the dataframe for State-preferences
+style_byState %>% group_by(State) %>%
+  summarize(Style = names(which.max(table(Style))),
+            ABV = mean(ABV), #could switch to median if needed
+            IBU = mean(IBU))
+#creating the summary for grpahing
+summary_byState <- style_byState %>%
+  group_by(State) %>%
+  summarize(Style = names(which.max(table(Style))),
+            ABV = median(ABV),
+            IBU = median(IBU))
+summary_byState <- summary_byState %>% dplyr::rename(state=State)
+
+beer_colors <- c("#FFCCFF", "#CC6633", "#993300",
+                 "#330000", "#FFCC66", "#663300",
+                 "#006699", "#3399FF", "#99CCFF",
+                 "#660066", "#66FF00", "#006600")
+
+plot_usmap(regions="states",
+           data=summary_byState,
+           values="Style",labels=F,offset=0.5, color="white") +
+  theme(legend.position="bottom",
+        legend.title=element_blank()) +
+  labs(title = "Preferred Beer Style\nby State") +
+  scale_fill_manual(values=beer_colors)
+
+```
+
+Above, we can see a depiction of majority preference by state for certain styles of beers. When ties occurred, we gave the win to the most prevalent beer-type nationally. The focus of our analysis here was to present a by-state retail option. With additional supply-chain information, we may be able to help optimize future distribution or optimization efforts.
