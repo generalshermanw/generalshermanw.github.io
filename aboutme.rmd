@@ -12,4 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ## About Me
 ### William Sherman
 ### Rochester, MN
-### Graduate Student at Southern Methodist University (Data Science)
+#### I am a graduate student at Southern Methodist University (Data Science).
+#### Recently, I was hired as a Statistical Programmer working to support the
+#### Quantitative Health Science department at the Mayo Clinic.
